@@ -35,6 +35,12 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.kotlinx.datetime)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.gson)
+            implementation(libs.okio)
+            implementation(libs.common)
+            implementation(libs.okhttp)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
