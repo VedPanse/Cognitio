@@ -22,16 +22,16 @@ fun HomeScreen() {
             item {
                 Text(text = "Start learning with", fontSize = 64.sp)
                 Text(text = appName, fontSize = 64.sp, color = AppTheme.themeColor)
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
                 Line()
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(35.dp))
                 Text(text = "Solving a quiz everyday can go a long way. Using AI generated quizzes, this app can help you understand the concepts of anything you want to learn. This application leverages Google Gemini to test you on these concepts.", color = AppTheme.primaryColor)
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(35.dp))
 
                 Line()
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
 
