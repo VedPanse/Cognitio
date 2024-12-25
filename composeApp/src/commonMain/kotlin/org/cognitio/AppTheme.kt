@@ -8,11 +8,14 @@ import androidx.compose.ui.unit.*
 
 expect val JetBrainsMono: FontFamily
 
+val appName: String = "Cognitio"
+
 object AppTheme {
     val bgColor = Color(0xFF333333)
-    val textColor = Color(0xFFFFFF)
-    val primaryColor = Color(0xFBFF8F)
+    val textColor = Color.White
+    val primaryColor = Color(0xFFFBFF8F)
     val themeColor = Color(0xFF7084FF)
+    val secondaryColor = Color.DarkGray
 }
 
 val AppTypography = Typography(

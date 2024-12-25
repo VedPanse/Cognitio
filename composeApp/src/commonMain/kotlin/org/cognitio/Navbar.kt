@@ -96,7 +96,7 @@ fun NavbarItem(
         Icon(
             imageVector = if (isSelected) icon else outlinedIcon,
             contentDescription = null,
-            tint = if (isSelected) AppTheme.themeColor else Color.White, // Icon color remains black
+            tint = if (isSelected) AppTheme.primaryColor else Color.White, // Icon color remains black
             modifier = Modifier.size(20.dp)
         )
     }
