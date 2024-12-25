@@ -51,3 +51,12 @@ fun App() {
         }
     }
 }
+
+
+fun isDesktop(): Boolean {
+    return try {
+        Class.forName("java.awt.Desktop") != null
+    } catch (e: ClassNotFoundException) {
+        false
+    }
+}
