@@ -16,7 +16,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -131,6 +133,32 @@ fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
                     style = MaterialTheme.typography.body1 // Optional: Use theme typography
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+fun GoButton(text: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = AppTheme.themeColor, // Explicitly use themeColor
+            contentColor = Color.White // Ensure the text and icon use white color
+        )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically // Ensures text and icon alignment
+        ) {
+            Text(
+                text = text,
+                modifier = Modifier.padding(end = 8.dp) // Spacing between text and icon
+            )
+            Icon(
+                imageVector = Icons.Default.ArrowForward, // Proper arrow icon
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }
