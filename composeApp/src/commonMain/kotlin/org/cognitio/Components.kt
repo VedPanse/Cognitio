@@ -49,11 +49,12 @@ fun CustomTextField(
             text = it
             getText(it) // Pass the updated text to the getText function
         },
-        modifier = Modifier
+        modifier = modifier.then(Modifier
             .background(AppTheme.secondaryColor, shape = RoundedCornerShape(5.dp)) // Add background with rounded corners
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .height(24.dp)
-            .width(250.dp),
+            .width(250.dp)
+        ),
         textStyle = TextStyle(fontSize = 14.sp, color = AppTheme.textColor), // Set font size and color
         singleLine = singleLine,
         cursorBrush = SolidColor(AppTheme.themeColor),
