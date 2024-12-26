@@ -83,15 +83,63 @@ class GeminiServer(private val apiKey: String) {
         }
     }
 
-    fun gradeQuestions(quiz: Quiz) {
-        quiz.questionList.forEachIndexed { i, question ->
-            if (i % 2 == 0) {
-                question.feedback = "Correct!"
-                question.points = 100.0
-            } else {
-                question.feedback = "Incorrect!"
-                question.points = 0.0
+    suspend fun gradeQuestions(quiz: Quiz) {
+        if (quiz.questionList.isEmpty())
+            throw IllegalArgumentException("Quiz must have at least one question")
+
+        var questionBar: String = "{\n"
+
+        quiz.questionList.forEach {
+            questionBar += when(it.type) {
+                QType.MCQ -> "(MCQ, the options were: [${it.options}])"
+                QType.LONG -> "(Long answer question 200 words)"
+                QType.SHORT -> "(Short answer question 50 words)"
+            } + it.question + ": " + it.enteredAnswer + ",\n"
+        }
+
+        questionBar += "}"
+
+        val message: String = """
+        You are a quiz grader AI. Rate each answer in the quiz (subject: ${quiz.subject}, topic: ${quiz.topic}) from 0 to 100. For MCQ, the grade can only be 0 or 100
+        The questions and user-entered answers are:
+        $questionBar
+        
+        DO NOT JUDGE THE QUESTIONS. Even if they may seem irrelevant to the subject or topic, grade them in a fair way.
+
+        Provide your output in the following format:
+        {
+            <question_number>: {
+                "grade": <grade>,
+                "feedback": <feedback>
             }
+        }
+    """.trimIndent()
+
+        var response = withContext(Dispatchers.IO) {
+            try {
+                val content = generativeModel.generateContent(message) // Assuming this is of type Content or String
+                content.text ?: ""  // Extract the text if it's a Content object, or return an empty string
+            } catch (e: Exception) {
+                println("Error while sending prompt: ${e.localizedMessage}")
+                null
+            }
+        }
+
+        if (response.isNullOrEmpty())
+            throw IllegalAccessException("Error communicating with the API: Failed to grade questions")
+
+        response = response.replace("```json", "").replace("```", "")
+
+        val gson = Gson()
+        val jsonObject = gson.fromJson(response, JsonObject::class.java)
+
+        for ((i, entry) in jsonObject.entrySet().withIndex()) {
+            val questionDetails = entry.value.asJsonObject
+            val feedback: String = questionDetails.get("feedback").asString
+            val grade: Double = questionDetails.get("grade").asDouble
+
+            quiz.questionList[i].feedback = feedback
+            quiz.questionList[i].points = grade
         }
     }
 }

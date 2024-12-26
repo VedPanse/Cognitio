@@ -46,7 +46,6 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var documentPath by remember { mutableStateOf<String?>(null) }
 
-    val isFormValid = subject.isNotEmpty() && topic.isNotEmpty() && numQuestions.max()!! > 0
     val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
 
     LazyColumn(
