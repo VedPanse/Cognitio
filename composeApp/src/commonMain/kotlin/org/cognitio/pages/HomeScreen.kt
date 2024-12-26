@@ -7,9 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
+import org.cognitio.CustomTextField
 import org.cognitio.Line
-import org.cognitio.SearchBar
 import org.cognitio.appName
+import org.cognitio.isDesktop
+
 
 @Composable
 fun HomeScreen() {
@@ -20,8 +22,8 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
             item {
-                Text(text = "Start learning with", fontSize = 64.sp)
-                Text(text = appName, fontSize = 64.sp, color = AppTheme.themeColor)
+                Text(text = "Start learning with", fontSize = 56.sp)
+                Text(text = appName, fontSize = 56.sp, color = AppTheme.themeColor)
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Line()
@@ -35,7 +37,12 @@ fun HomeScreen() {
             }
         }
 
-        SearchBar()
-        Spacer(modifier = Modifier.width(20.dp))
+        if (isDesktop()) {
+            var searchedText by remember { mutableStateOf("") }
+            CustomTextField("Search", true, getText = { searchedText = it })
+
+            // TODO implement search
+            Spacer(modifier = Modifier.width(20.dp))
+        }
     }
 }

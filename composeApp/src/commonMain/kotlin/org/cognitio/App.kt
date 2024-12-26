@@ -14,6 +14,12 @@ import org.cognitio.pages.SearchScreen
 import org.cognitio.pages.SettingsScreen
 import org.eidetic.Navbar
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import java.io.File
+import java.util.Properties
+
+
+var apiKey: String = ""
+expect fun getEnvPath(): String
 
 
 @Composable
@@ -21,6 +27,20 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     var currentScreen by remember { mutableStateOf(Screen.HOME) }
     var selectedQuiz by remember { mutableStateOf<Quiz?>(null)}
+    val envFile: File = File(getEnvPath())
+
+    if (envFile.exists() && envFile.isFile) {
+        println("Checkpoint 1")
+        val properties = Properties()
+        properties.load(envFile.inputStream())
+
+        apiKey = properties.getProperty("GEMINI_API_KEY", "").also {
+            if (it.isEmpty()) currentScreen = Screen.SETTINGS
+        }
+    } else {
+        currentScreen = Screen.SETTINGS
+    }
+
 
     MaterialTheme(
         typography = AppTypography
