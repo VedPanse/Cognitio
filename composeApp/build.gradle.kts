@@ -39,8 +39,8 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.gson)
             implementation(libs.okio)
-            implementation(libs.common)
             implementation(libs.okhttp)
+            implementation(libs.generativeai.google)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

@@ -20,6 +20,8 @@ import java.util.Properties
 var apiKey: String = ""
 expect fun getEnvPath(): String
 
+// TODO comments and documentation for kotlin convention
+
 @Composable
 @Preview
 fun App() {
@@ -65,9 +67,11 @@ fun App() {
                     Screen.HOME -> HomeScreen()
                     Screen.SETTINGS -> SettingsScreen()
                     Screen.QUIZ_SCREEN -> QuizScreen(quiz = selectedQuiz!!)
-                    Screen.QUIZ_FORM -> QuizFormScreen { quiz ->
+                    Screen.QUIZ_FORM -> QuizFormScreen(showQuiz = { quiz ->
                         selectedQuiz = quiz
                         currentScreen = Screen.QUIZ_SCREEN
+                    }) {
+                        currentScreen = Screen.SETTINGS
                     }
 
                     Screen.DASHBOARD -> DashboardScreen()

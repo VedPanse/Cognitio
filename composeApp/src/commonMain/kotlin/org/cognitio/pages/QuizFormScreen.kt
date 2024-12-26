@@ -18,13 +18,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
+import org.cognitio.GeminiServer
 import org.cognitio.GoButton
 import org.cognitio.Line
 import org.cognitio.PopupType
 import org.cognitio.Quiz
+import org.cognitio.Screen
 import org.cognitio.TimedPopup
+import org.cognitio.apiKey
 import org.cognitio.appName
 import org.cognitio.isDesktop
 import java.awt.FileDialog
@@ -35,7 +39,7 @@ import java.io.FilenameFilter
 
 
 @Composable
-fun QuizFormScreen(showQuiz: (Quiz) -> Unit) {
+fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
     var subject by remember { mutableStateOf("") }
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
@@ -43,6 +47,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit) {
     var documentPath by remember { mutableStateOf<String?>(null) }
 
     val isFormValid = subject.isNotEmpty() && topic.isNotEmpty() && numQuestions.max()!! > 0
+    val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
 
     LazyColumn(
         modifier = Modifier
@@ -121,15 +126,31 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit) {
                         errorMessage = "Each question type must have at least one question"
                     }
 
+                    apiKey.isNullOrEmpty() -> {
+                        settingsRedirect()
+                    }
+
                     else -> {
-                        val quiz =
-                            Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
-                        println("Generating...")
-                        errorMessage = null // Clear any existing error
+                        val quiz = Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
+
+                        // Use coroutine scope to call the generateQuestionList function
+                        scope.launch {
+                            try {
+                                // Call the method to generate questions asynchronously
+                                GeminiServer(apiKey).generateQuestionList(quiz)
+
+                                for (question in quiz.questionList)
+                                    println(question)
+
+                                showQuiz(quiz) // Show the generated quiz
+                                errorMessage = null // Clear any existing error
+                            } catch (e: Exception) {
+                                errorMessage = "Failed to generate quiz: ${e.localizedMessage}"
+                            }
+                        }
                     }
                 }
             }
-
         }
     }
 }

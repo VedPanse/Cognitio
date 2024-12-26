@@ -13,6 +13,7 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 common = "0.10.0"
 compose-multiplatform = "1.7.0"
+generativeaiGoogle = "0.9.0-1.0.1-wasm"
 gson = "2.11.0"
 junit = "4.13.2"
 kotlin = "2.1.0"
@@ -25,6 +26,7 @@ okio = "3.9.1"
 [libraries]
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 common = { module = "com.google.ai.client.generativeai:common", version.ref = "common" }
+generativeai-google = { module = "dev.shreyaspatil.generativeai:generativeai-google", version.ref = "generativeaiGoogle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
