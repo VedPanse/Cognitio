@@ -47,7 +47,7 @@ fun QuizScreen(quiz: Quiz) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.5f)
+                        .height(280.dp)
                 ) {
                     items(quiz.questionList.size) { index ->
                         Text(
@@ -73,14 +73,23 @@ fun QuizScreen(quiz: Quiz) {
                             quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
                     }
                 })
-                Spacer(modifier = Modifier.height(60.dp))
 
-                if (graded)
+                Spacer(modifier = Modifier.height(30.dp))
+
+                if (graded) {
                     Text(
-                        "Final Grade: ${percentage}%",
+                        "Final Quiz Grade",
                         color = AppTheme.themeColor,
                         fontSize = 24.sp
                     )
+
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Text(
+                        "$percentage%",
+                        fontSize = 30.sp
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
             }
@@ -95,6 +104,15 @@ fun QuizScreen(quiz: Quiz) {
         ) {
             item {
                 val question = quiz.questionList[currentIndex]
+
+                if (graded && !isDesktop()) {
+                    Text(
+                        "Final Quiz Grade: ${percentage}%",
+                        color = AppTheme.themeColor,
+                        fontSize = 18.sp
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
 
                 // Question Text
                 Text(
