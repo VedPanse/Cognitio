@@ -1,18 +1,27 @@
 package org.cognitio.pages
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.*
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.*
+import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
 import org.cognitio.PopupType
 import org.cognitio.TimedPopup
 import org.cognitio.getEnvPath
 import org.cognitio.writeFile
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import java.io.File
 
 
@@ -27,6 +36,26 @@ fun SettingsScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Settings", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+
+        // Creating an AnnotatedString with a link annotation
+        val link = "https://aistudio.google.com/app/apikey"
+        val annotatedString = buildAnnotatedString {
+            append("You can get a GEMINI-1.5-FLASH API key from ")
+            pushStringAnnotation(tag = "URL", annotation = link)
+            withStyle(style = SpanStyle(color = AppTheme.primaryColor, textDecoration = TextDecoration.Underline)) {
+                append(link)
+            }
+            pop()
+        }
+
+        // Displaying the text with the clickable link
+        Text(
+            text = annotatedString,
+            modifier = Modifier.clickable {
+                // Handle the click event for the link
+                openUrlInBrowser(link)
+            }
+        )
 
         CustomTextField(
             placeholder = "Enter your API key",
@@ -80,3 +109,6 @@ fun SettingsScreen() {
     }
 }
 
+
+// Declare the expected platform-specific function
+expect fun openUrlInBrowser(url: String)
