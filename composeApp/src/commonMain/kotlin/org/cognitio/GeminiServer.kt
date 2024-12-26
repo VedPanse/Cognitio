@@ -82,4 +82,16 @@ class GeminiServer(private val apiKey: String) {
             quiz.questionList.add(question)
         }
     }
+
+    fun gradeQuestions(quiz: Quiz) {
+        quiz.questionList.forEachIndexed { i, question ->
+            if (i % 2 == 0) {
+                question.feedback = "Correct!"
+                question.points = 100.0
+            } else {
+                question.feedback = "Incorrect!"
+                question.points = 0.0
+            }
+        }
+    }
 }
