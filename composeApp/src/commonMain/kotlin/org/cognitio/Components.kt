@@ -15,6 +15,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
@@ -76,4 +81,55 @@ fun CustomTextField(
             }
         }
     )
+}
+
+
+enum class PopupType {
+    SUCCESS, INFO, ERROR
+}
+
+
+@Composable
+fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
+    var isVisible by remember { mutableStateOf(true) }
+
+    if (isVisible) {
+        LaunchedEffect(Unit) {
+            kotlinx.coroutines.delay(time.toLong())
+            isVisible = false // Automatically hide the popup after the delay
+        }
+
+        Box(
+            modifier = Modifier
+                .background(color = when(popupType) {
+                    PopupType.INFO -> AppTheme.themeColor
+                    PopupType.ERROR -> Color.Red
+                    PopupType.SUCCESS -> Color.Green
+                }, shape = RoundedCornerShape(20.dp))
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = when (popupType) {
+                        PopupType.SUCCESS -> Icons.Default.Check
+                        PopupType.INFO -> Icons.Default.Info
+                        PopupType.ERROR -> Icons.Default.Warning
+                    },
+                    contentDescription = null,
+                    tint = Color.Black, // Icon color
+                    modifier = Modifier.size(24.dp) // Icon size
+                )
+
+                Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+
+                Text(
+                    text = message,
+                    color = Color.Black,
+                    style = MaterialTheme.typography.body1 // Optional: Use theme typography
+                )
+            }
+        }
+    }
 }
