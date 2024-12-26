@@ -92,18 +92,20 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit) {
             Spacer(modifier = Modifier.height(30.dp))
 
             // File Picker Dialog
-            FilePickerBox(
-                documentPath = documentPath,
-                onClick = {
-                    if (isDesktop()) {
-                        documentPath = pickFile()
-                    }
-                },
-                textColor = AppTheme.textColor
-            )
+            if (isDesktop()) {
+                FilePickerBox(
+                    documentPath = documentPath,
+                    onClick = {
+                        if (isDesktop()) {
+                            documentPath = pickFile()
+                        }
+                    },
+                    textColor = AppTheme.textColor
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
             // Show error message as a popup before the button, if errorMessage is not null
-            Spacer(modifier = Modifier.height(20.dp))
             errorMessage?.let { message ->
                 TimedPopup(message, PopupType.ERROR)
             }
@@ -114,11 +116,14 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit) {
                     subject.isEmpty() || topic.isEmpty() -> {
                         errorMessage = "Subject and topic fields cannot be empty"
                     }
+
                     numQuestions.max() == 0 -> {
                         errorMessage = "Each question type must have at least one question"
                     }
+
                     else -> {
-                        val quiz = Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
+                        val quiz =
+                            Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
                         println("Generating...")
                         errorMessage = null // Clear any existing error
                     }
@@ -140,7 +145,8 @@ fun FilePickerBox(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(AppTheme.secondaryColor,
+            .background(
+                AppTheme.secondaryColor,
                 shape = RoundedCornerShape(20.dp)
             ) // Background color of the box
             .clickable(onClick = onClick), // File picker click handler
@@ -160,7 +166,8 @@ fun FilePickerBox(
             Spacer(modifier = Modifier.width(8.dp))
             // Display the text: if a file is selected, show the file name
             Text(
-                text = documentPath ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",
+                text = documentPath
+                    ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",
                 color = textColor,
                 style = TextStyle(fontSize = 14.sp)
             )
@@ -267,7 +274,7 @@ fun NumericInputFields(
                         )
                         .width(40.dp)
                         .height(40.dp)
-                        .padding(top=10.dp)
+                        .padding(top = 10.dp)
                 ) {
                     BasicTextField(
                         value = numQuestions[index].toString(),
