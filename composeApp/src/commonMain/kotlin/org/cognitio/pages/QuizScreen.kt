@@ -244,7 +244,8 @@ fun QuizScreen(quiz: Quiz) {
                         scope.launch {
                             GeminiServer(apiKey).gradeQuestions(quiz)
                             graded = true
-                            percentage = quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                            percentage =
+                                quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
                         }
                     })
                 }
