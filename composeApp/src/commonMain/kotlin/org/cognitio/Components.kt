@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
@@ -142,10 +143,11 @@ fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
 fun GoButton(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
+        shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = AppTheme.themeColor, // Explicitly use themeColor
+            backgroundColor = Color(0xFF5234EB), // Explicitly use themeColor
             contentColor = Color.White // Ensure the text and icon use white color
-        )
+        ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically // Ensures text and icon alignment
