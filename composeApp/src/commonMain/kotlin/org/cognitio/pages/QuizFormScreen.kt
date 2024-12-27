@@ -34,7 +34,7 @@ import java.awt.FileDialog
 import java.awt.Frame
 import java.io.FilenameFilter
 
-// TODO if no internet connection, error message
+
 
 @Composable
 fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
@@ -42,6 +42,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    // TODO errorMessage must be shown twice for repeated invalid inputs
     var documentPath by remember { mutableStateOf<String?>(null) }
 
     val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
@@ -129,6 +130,10 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                         settingsRedirect()
                     }
 
+                    !isInternetAvailable() -> {
+                        errorMessage = "No internet connection available to generate quiz"
+                    }
+
                     else -> {
                         buttonText = "Generating..."
                         val quiz = Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
@@ -136,13 +141,13 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                         // Use coroutine scope to call the generateQuestionList function
                         scope.launch {
                             try {
-                                // Call the method to generate questions asynchronously
 
-                                // TODO shoot error message
+                                // Call the method to generate questions asynchronously
                                 GeminiServer(apiKey).generateQuestionList(quiz)
 
-                                for (question in quiz.questionList)
+                                for (question in quiz.questionList) {
                                     println(question)
+                                }
 
                                 showQuiz(quiz) // Show the generated quiz
                                 errorMessage = null // Clear any existing error
@@ -323,3 +328,6 @@ fun NumericInputFields(
         }
     }
 }
+
+
+expect fun isInternetAvailable(): Boolean

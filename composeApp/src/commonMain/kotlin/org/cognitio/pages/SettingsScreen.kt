@@ -49,6 +49,7 @@ fun SettingsScreen() {
         Text("Settings", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
         // Creating an AnnotatedString with a link annotation
+        // TODO add more instructions on getting an API key
         val link = "https://aistudio.google.com/app/apikey"
         val annotatedString = buildAnnotatedString {
             append("You can get a GEMINI-1.5-FLASH API key from ")
