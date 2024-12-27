@@ -6,6 +6,9 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
+import com.google.gson.Gson
+import okio.FileSystem
+import okio.Path
 import org.cognitio.pages.DashboardScreen
 import org.cognitio.pages.HomeScreen
 import org.cognitio.pages.QuizFormScreen
@@ -19,6 +22,10 @@ import java.util.Properties
 
 var apiKey: String = ""
 expect fun getEnvPath(): String
+
+val gson = Gson()
+val filePath: Path = getJSONFilePath()
+val fileSystem = FileSystem.SYSTEM
 
 // TODO comments and documentation for kotlin convention
 
@@ -46,6 +53,12 @@ fun App() {
         } else {
             // Redirect to Settings if .env does not exist
             currentScreen = Screen.SETTINGS
+        }
+    }
+
+    if (!fileSystem.exists(filePath)) {
+        fileSystem.write(filePath) {
+            writeUtf8("{}") // Start with an empty JSON object
         }
     }
 

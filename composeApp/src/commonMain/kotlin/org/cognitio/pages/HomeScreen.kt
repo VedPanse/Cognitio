@@ -21,6 +21,7 @@ fun HomeScreen() {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
+            // TODO play around with colors
             item {
                 Text(text = "Start learning with", fontSize = 56.sp)
                 Text(text = appName, fontSize = 56.sp, color = AppTheme.themeColor)
@@ -34,6 +35,8 @@ fun HomeScreen() {
                 Line()
 
                 Spacer(modifier = Modifier.height(40.dp))
+
+                // TODO render past quizzes
             }
         }
 

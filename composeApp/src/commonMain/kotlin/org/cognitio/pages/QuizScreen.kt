@@ -24,6 +24,7 @@ import org.cognitio.Quiz
 import org.cognitio.isDesktop
 import kotlinx.coroutines.launch
 import org.cognitio.GeminiServer
+import org.cognitio.addQuiz
 import org.cognitio.apiKey
 
 
@@ -74,11 +75,12 @@ fun QuizScreen(quiz: Quiz) {
                         buttonText = "Submitting..."
                         scope.launch {
                             try {
-                                // TODO shoot error message
                                 GeminiServer(apiKey).gradeQuestions(quiz)
                                 graded = true
                                 percentage =
                                     quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                                quiz.grade = percentage
+                                addQuiz(quiz)
                             } catch (e: IllegalArgumentException) {
                                 println("Quiz was empty")
                             } catch (e: IllegalAccessException) {
@@ -100,8 +102,7 @@ fun QuizScreen(quiz: Quiz) {
 
                     Spacer(modifier = Modifier.height(5.dp))
 
-                    Text(
-                        "$percentage%",
+                    Text(String.format("%.2f", percentage) + "%",
                         fontSize = 30.sp
                     )
                 }
@@ -122,7 +123,7 @@ fun QuizScreen(quiz: Quiz) {
 
                 if (graded && !isDesktop()) {
                     Text(
-                        "Final Quiz Grade: ${percentage}%",
+                        String.format("%.2f", percentage) + "%",
                         color = AppTheme.themeColor,
                         fontSize = 18.sp
                     )
@@ -251,6 +252,9 @@ fun QuizScreen(quiz: Quiz) {
                     Spacer(modifier = Modifier.height(40.dp))
                     Line()
                     Spacer(modifier = Modifier.height(40.dp))
+                    Text(text = quiz.questionList[currentIndex].points.toString(),
+                        color = AppTheme.themeColor)
+                    Spacer(modifier = Modifier.height(5.dp))
                     quiz.questionList[currentIndex].feedback?.let { Text(it) }
                 }
 
@@ -265,8 +269,8 @@ fun QuizScreen(quiz: Quiz) {
                                 graded = true
                                 percentage =
                                     quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
-
-                                // TODO save quiz to json file
+                                quiz.grade = percentage
+                                addQuiz(quiz)
                             } catch (e: IllegalArgumentException) {
                                 println("Quiz was empty")
                             } catch (e: IllegalAccessException) {
