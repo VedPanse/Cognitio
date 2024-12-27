@@ -28,21 +28,6 @@ fun App() {
     var currentScreen by remember { mutableStateOf(Screen.HOME) }
     var selectedQuiz by remember { mutableStateOf<Quiz?>(null) }
 
-    val quiz = Quiz("History", "World War II", intArrayOf(1, 1, 1), null, null)
-    val question1: Question = Question("What is the capital of France?", "Paris", QType.MCQ, listOf("Paris", "London", "Berlin", "Madrid"))
-    val question2: Question = Question("What is the largest planet in our solar system?", "Jupiter", QType.MCQ, listOf("Mars", "Jupiter", "Saturn", "Earth"))
-    val question3: Question = Question("Who wrote the play 'Romeo and Juliet'?", null, QType.SHORT, null)
-    val question4: Question = Question("What is the largest country in the world by land area?", null, QType.LONG, null)
-
-    quiz.questionList.add(question1)
-    quiz.questionList.add(question2)
-    quiz.questionList.add(question3)
-    quiz.questionList.add(question4)
-
-    selectedQuiz = quiz
-    currentScreen = Screen.QUIZ_SCREEN
-
-
     // Initialize app state and check for .env file
     LaunchedEffect(Unit) {
         val envPath = getEnvPath()

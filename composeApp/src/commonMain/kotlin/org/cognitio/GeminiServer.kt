@@ -74,8 +74,8 @@ class GeminiServer(private val apiKey: String) {
 
             // Create and add the question to the quiz's question list
             val question = Question(
-                questionText,
-                answer,
+                questionText.replace("  ", " "),
+                answer?.replace("  ", " "),
                 type,
                 options
             )
@@ -126,7 +126,7 @@ class GeminiServer(private val apiKey: String) {
         }
 
         if (response.isNullOrEmpty())
-            throw IllegalAccessException("Error communicating with the API: Failed to grade questions")
+            throw IllegalAccessException("Error communicating with the API: Failed to grade questions - AI returned empty response")
 
         response = response.replace("```json", "").replace("```", "")
 
@@ -138,7 +138,7 @@ class GeminiServer(private val apiKey: String) {
             val feedback: String = questionDetails.get("feedback").asString
             val grade: Double = questionDetails.get("grade").asDouble
 
-            quiz.questionList[i].feedback = feedback
+            quiz.questionList[i].feedback = feedback.replace("  ", " ")
             quiz.questionList[i].points = grade
         }
     }

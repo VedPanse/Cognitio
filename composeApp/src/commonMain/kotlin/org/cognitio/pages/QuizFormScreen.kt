@@ -26,15 +26,12 @@ import org.cognitio.GoButton
 import org.cognitio.Line
 import org.cognitio.PopupType
 import org.cognitio.Quiz
-import org.cognitio.Screen
 import org.cognitio.TimedPopup
 import org.cognitio.apiKey
 import org.cognitio.appName
 import org.cognitio.isDesktop
 import java.awt.FileDialog
 import java.awt.Frame
-import javax.swing.filechooser.FileFilter
-import java.io.File
 import java.io.FilenameFilter
 
 
@@ -136,6 +133,8 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                         scope.launch {
                             try {
                                 // Call the method to generate questions asynchronously
+
+                                // TODO shoot error message
                                 GeminiServer(apiKey).generateQuestionList(quiz)
 
                                 for (question in quiz.questionList)

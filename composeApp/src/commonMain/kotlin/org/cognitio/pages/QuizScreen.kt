@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import org.cognitio.GeminiServer
 import org.cognitio.apiKey
 
+
 @Composable
 fun QuizScreen(quiz: Quiz) {
     var currentIndex by remember { mutableStateOf(0) }
@@ -65,12 +66,20 @@ fun QuizScreen(quiz: Quiz) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Line()
                 Spacer(modifier = Modifier.height(40.dp))
+
                 GoButton("Submit quiz", onClick = {
                     scope.launch {
-                        GeminiServer(apiKey).gradeQuestions(quiz)
-                        graded = true
-                        percentage =
-                            quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                        try {
+                            // TODO shoot error message
+                            GeminiServer(apiKey).gradeQuestions(quiz)
+                            graded = true
+                            percentage =
+                                quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                        } catch (e: IllegalArgumentException) {
+                            println("Quiz was empty")
+                        } catch (e: IllegalAccessException) {
+                            println("Wrong API Key")
+                        }
                     }
                 })
 
@@ -242,10 +251,17 @@ fun QuizScreen(quiz: Quiz) {
                 if (!isDesktop()) {
                     GoButton("Submit quiz", onClick = {
                         scope.launch {
-                            GeminiServer(apiKey).gradeQuestions(quiz)
-                            graded = true
-                            percentage =
-                                quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                            try {
+                                GeminiServer(apiKey).gradeQuestions(quiz)
+
+                                graded = true
+                                percentage =
+                                    quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                            } catch (e: IllegalArgumentException) {
+                                println("Quiz was empty")
+                            } catch (e: IllegalAccessException) {
+                                println("Wrong API Key")
+                            }
                         }
                     })
                 }
