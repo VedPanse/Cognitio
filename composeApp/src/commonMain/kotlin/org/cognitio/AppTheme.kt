@@ -16,6 +16,8 @@ object AppTheme {
     val primaryColor = Color(0xFFFBFF8F)
     val themeColor = Color(0xFF7084FF)
     val secondaryColor = Color.DarkGray
+    val buttonColor = Color(0xFF5234EB)
+
 }
 
 val AppTypography = Typography(

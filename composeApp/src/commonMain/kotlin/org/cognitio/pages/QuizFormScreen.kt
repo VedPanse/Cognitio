@@ -34,6 +34,7 @@ import java.awt.FileDialog
 import java.awt.Frame
 import java.io.FilenameFilter
 
+// TODO if no internet connection, error message
 
 @Composable
 fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
@@ -112,7 +113,9 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            GoButton("Generate Quiz") {
+
+            var buttonText by remember { mutableStateOf("Generate Quiz") }
+            GoButton(buttonText) {
                 when {
                     subject.isEmpty() || topic.isEmpty() -> {
                         errorMessage = "Subject and topic fields cannot be empty"
@@ -127,6 +130,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                     }
 
                     else -> {
+                        buttonText = "Generating..."
                         val quiz = Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
 
                         // Use coroutine scope to call the generateQuestionList function
@@ -184,6 +188,8 @@ fun FilePickerBox(
             )
             Spacer(modifier = Modifier.width(8.dp))
             // Display the text: if a file is selected, show the file name
+
+            // TODO send to gemini
             Text(
                 text = documentPath
                     ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",
@@ -231,6 +237,7 @@ fun InputFields(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            // TODO replace with <select>?
             CustomTextField(
                 "Enter subject. Ex: History",
                 true,

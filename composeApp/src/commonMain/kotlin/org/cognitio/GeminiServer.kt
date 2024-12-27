@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
 class GeminiServer(private val apiKey: String) {
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",

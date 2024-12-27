@@ -141,11 +141,24 @@ fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
 
 @Composable
 fun GoButton(text: String, onClick: () -> Unit) {
+    var clicked by remember { mutableStateOf(false) }
+
+    // Handle resetting the clicked state with a delay
+    if (clicked && !text.contains("...")) {
+        LaunchedEffect(Unit) {
+            kotlinx.coroutines.delay(2000)
+            clicked = false
+        }
+    }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            clicked = true
+            onClick()
+        },
         shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF5234EB), // Explicitly use themeColor
+            backgroundColor = if (clicked) Color.Black else AppTheme.buttonColor,
             contentColor = Color.White // Ensure the text and icon use white color
         ),
     ) {

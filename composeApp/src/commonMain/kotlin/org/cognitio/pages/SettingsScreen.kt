@@ -57,6 +57,7 @@ fun SettingsScreen() {
             }
         )
 
+        // TODO Validate if API key is valid (and for 1.5-flash)
         CustomTextField(
             placeholder = "Enter your API key",
             singleLine = true,

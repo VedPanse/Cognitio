@@ -67,21 +67,27 @@ fun QuizScreen(quiz: Quiz) {
                 Line()
                 Spacer(modifier = Modifier.height(40.dp))
 
-                GoButton("Submit quiz", onClick = {
-                    scope.launch {
-                        try {
-                            // TODO shoot error message
-                            GeminiServer(apiKey).gradeQuestions(quiz)
-                            graded = true
-                            percentage =
-                                quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
-                        } catch (e: IllegalArgumentException) {
-                            println("Quiz was empty")
-                        } catch (e: IllegalAccessException) {
-                            println("Wrong API Key")
+                var buttonText by remember { mutableStateOf("Submit quiz") }
+
+                if (!graded) {
+                    GoButton(buttonText) {
+                        buttonText = "Submitting..."
+                        scope.launch {
+                            try {
+                                // TODO shoot error message
+                                GeminiServer(apiKey).gradeQuestions(quiz)
+                                graded = true
+                                percentage =
+                                    quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+                            } catch (e: IllegalArgumentException) {
+                                println("Quiz was empty")
+                            } catch (e: IllegalAccessException) {
+                                println("Wrong API Key")
+                            }
                         }
                     }
-                })
+                }
+
 
                 Spacer(modifier = Modifier.height(30.dp))
 
@@ -248,8 +254,10 @@ fun QuizScreen(quiz: Quiz) {
                     quiz.questionList[currentIndex].feedback?.let { Text(it) }
                 }
 
-                if (!isDesktop()) {
-                    GoButton("Submit quiz", onClick = {
+                if (!isDesktop() && !graded) {
+                    var buttonText by remember { mutableStateOf("Submit quiz") }
+                    GoButton(buttonText) {
+                        buttonText = "Submitting..."
                         scope.launch {
                             try {
                                 GeminiServer(apiKey).gradeQuestions(quiz)
@@ -257,13 +265,15 @@ fun QuizScreen(quiz: Quiz) {
                                 graded = true
                                 percentage =
                                     quiz.questionList.sumOf { it.points } / (quiz.questionList.size)
+
+                                // TODO save quiz to json file
                             } catch (e: IllegalArgumentException) {
                                 println("Quiz was empty")
                             } catch (e: IllegalAccessException) {
                                 println("Wrong API Key")
                             }
                         }
-                    })
+                    }
                 }
             }
         }
