@@ -3,6 +3,8 @@ package org.cognitio.pages
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
@@ -30,6 +32,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.cognitio.Line
 import java.io.File
 import java.io.IOException
 
@@ -41,6 +44,8 @@ fun SettingsScreen() {
     var showSuccessPopup by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
+    val innerPadding: Int = 2
+    val outerPadding: Int = 5
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -48,8 +53,12 @@ fun SettingsScreen() {
     ) {
         Text("Settings", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
+        Spacer(modifier = Modifier.height(outerPadding.dp))
+        Line()
+        Spacer(modifier = Modifier.height(innerPadding.dp))
         // Creating an AnnotatedString with a link annotation
-        // TODO add more instructions on getting an API key
+
+
         val link = "https://aistudio.google.com/app/apikey"
         val annotatedString = buildAnnotatedString {
             append("You can get a GEMINI-1.5-FLASH API key from ")
@@ -63,8 +72,18 @@ fun SettingsScreen() {
                 append(link)
             }
             pop()
+            append(" ")
+            append("""
+                Follow these steps:-
+                1. CLick on the link
+                2. Sign in with your google account if you are not already signed in
+                3. Click "Create an API Key"
+                4. In order to get a free API key, you will have to select a project from Google Cloud Projects. 
+                5. Make sure the API key you created is "GEMINI-1.5-FLASH"
+                6. Copy the API Key and enter it below
+                7. Hit enter
+            """.trimIndent())
         }
-
         // Displaying the text with the clickable link
         Text(
             text = annotatedString,
@@ -73,8 +92,9 @@ fun SettingsScreen() {
                 openUrlInBrowser(link)
             }
         )
-
-        val coroutineScope = rememberCoroutineScope()
+        Spacer(modifier = Modifier.height(innerPadding.dp))
+        Line()
+        Spacer(modifier = Modifier.height(outerPadding.dp))
 
         CustomTextField(
             placeholder = "Enter your API key",
