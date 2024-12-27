@@ -42,10 +42,9 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    // TODO errorMessage must be shown twice for repeated invalid inputs
     var documentPath by remember { mutableStateOf<String?>(null) }
 
-    val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier
@@ -60,7 +59,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
 
             Text(
                 "$appName will use the API key you provided in Settings to generate questions and grade quizzes. " +
-                        "Therefore, content created in the quiz may not be always true.",
+                        "Therefore, content created in the quiz may not always be true.",
                 color = AppTheme.primaryColor
             )
 
@@ -69,6 +68,17 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             Spacer(modifier = Modifier.height(40.dp))
 
             // Render input fields for Subject and Topic
+            errorMessage?.let { message ->
+                LaunchedEffect(message) {
+                    // Clear the error message after 2 seconds
+                    kotlinx.coroutines.delay(2000)
+                    errorMessage = null
+                }
+                TimedPopup(message, PopupType.ERROR)
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             InputFields(
                 subject,
                 topic,
@@ -108,10 +118,8 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            // Show error message as a popup before the button, if errorMessage is not null
-            errorMessage?.let { message ->
-                TimedPopup(message, PopupType.ERROR)
-            }
+            // Show error message below the button, if errorMessage is not null
+
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -138,10 +146,8 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                         buttonText = "Generating..."
                         val quiz = Quiz(subject, topic, numQuestions.toIntArray(), null, documentPath)
 
-                        // Use coroutine scope to call the generateQuestionList function
                         scope.launch {
                             try {
-
                                 // Call the method to generate questions asynchronously
                                 GeminiServer(apiKey).generateQuestionList(quiz)
 
