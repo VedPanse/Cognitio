@@ -22,7 +22,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.File
+import java.io.IOException
 
 
 @Composable
@@ -30,6 +39,8 @@ fun SettingsScreen() {
     var newAPIKey by remember { mutableStateOf("") }
     var showErrorPopup by remember { mutableStateOf(false) }
     var showSuccessPopup by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -42,7 +53,12 @@ fun SettingsScreen() {
         val annotatedString = buildAnnotatedString {
             append("You can get a GEMINI-1.5-FLASH API key from ")
             pushStringAnnotation(tag = "URL", annotation = link)
-            withStyle(style = SpanStyle(color = AppTheme.primaryColor, textDecoration = TextDecoration.Underline)) {
+            withStyle(
+                style = SpanStyle(
+                    color = AppTheme.primaryColor,
+                    textDecoration = TextDecoration.Underline
+                )
+            ) {
                 append(link)
             }
             pop()
@@ -57,22 +73,34 @@ fun SettingsScreen() {
             }
         )
 
-        // TODO Validate if API key is valid (and for 1.5-flash)
+        val coroutineScope = rememberCoroutineScope()
+
         CustomTextField(
             placeholder = "Enter your API key",
             singleLine = true,
             getText = { newAPIKey = it },
             onEnterKeyPressed = {
                 try {
-                    val file = File(getEnvPath())
-                    if (!file.exists()) file.createNewFile()
+                    // Validate API key (suspend function)
+                    validateApiKey(newAPIKey)
 
-                    writeFile(getEnvPath(), "GEMINI_API_KEY=$newAPIKey")
+                    // Save the key
+                    if (!showErrorPopup) {
+                        val file = File(getEnvPath())
+                        if (!file.exists()) file.createNewFile()
 
-                    // Show success popup
-                    showSuccessPopup = true
+                        writeFile(getEnvPath(), "GEMINI_API_KEY=$newAPIKey")
+
+                        // Show success popup
+                        showSuccessPopup = true
+                    }
+                } catch (e: IllegalArgumentException) {
+                    // Show error popup for validation failure
+                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model"
+                    showErrorPopup = true
                 } catch (e: Exception) {
-                    // Show error popup
+                    // Show error popup for other failures
+                    errorMessage = "Encountered an error while updating API Key. Make sure the device is connected to the internet."
                     showErrorPopup = true
                 }
             }
@@ -96,7 +124,7 @@ fun SettingsScreen() {
         // Show error popup if there is an error
         if (showErrorPopup) {
             TimedPopup(
-                message = "Encountered an error while updating API Key",
+                message = errorMessage,
                 popupType = PopupType.ERROR,
                 time = 3000 // Show popup for 3 seconds
             )
@@ -113,3 +141,33 @@ fun SettingsScreen() {
 
 // Declare the expected platform-specific function
 expect fun openUrlInBrowser(url: String)
+
+fun validateApiKey(apiKey: String): Boolean {
+    val client = OkHttpClient()
+    val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey"
+
+    val requestBody = """
+        {
+            "contents": [{
+                "parts": [{"text": "say hi"}]
+            }]
+        }
+    """.trimIndent()
+
+    val request = Request.Builder()
+        .url(url)
+        .post(okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), requestBody))
+        .build()
+
+    try {
+        val response: Response = client.newCall(request).execute()
+        val responseBody = response.body?.string()
+        if (!response.isSuccessful || (responseBody?.contains("API Key invalid", ignoreCase = true) == true)) {
+            throw IllegalArgumentException("API key is invalid. Error: ${response.code} - ${response.message}")
+        }
+        return true
+    } catch (e: IOException) {
+        println("Failed to make request: ${e.message}")
+        throw IllegalArgumentException("Network error occurred while validating the API key")
+    }
+}
