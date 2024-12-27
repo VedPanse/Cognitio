@@ -20,11 +20,11 @@ fun HomeScreen() {
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(0.8f)
+                .fillMaxHeight()
         ) {
-            // TODO play around with colors
             item {
                 Text(text = "Start learning with", fontSize = 56.sp)
-                Text(text = appName, fontSize = 56.sp, color = AppTheme.themeColor)
+                Text(text = appName, fontSize = if (isDesktop()) 70.sp else 56.sp, color = AppTheme.themeColor)
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Line()
