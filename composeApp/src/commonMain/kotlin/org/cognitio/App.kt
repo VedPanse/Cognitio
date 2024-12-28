@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import okio.FileSystem
 import okio.Path
@@ -74,6 +75,8 @@ fun App() {
             Spacer(modifier = Modifier.width(30.dp))
 
             Column {
+                val subjectList: List<Subject> = listOf(Subject.MATHEMATICS, Subject.HISTORY)
+                SubjectRep(subjectList)
                 Spacer(modifier = Modifier.height(30.dp))
 
                 when (currentScreen) {
@@ -100,5 +103,24 @@ fun isDesktop(): Boolean {
         Class.forName("java.awt.Desktop") != null
     } catch (e: ClassNotFoundException) {
         false
+    }
+}
+
+
+@Composable
+fun SubjectRep(subjectList: List<Subject>) {
+    Row {
+        subjectList.forEach {
+            Box(
+                modifier = Modifier.background(color = it.bgColor)
+                    .padding(7.dp)
+            ) {
+                Text(
+                    text = it.toString(),
+                    color = it.textColor,
+                    fontSize = 12.sp
+                )
+            }
+        }
     }
 }
