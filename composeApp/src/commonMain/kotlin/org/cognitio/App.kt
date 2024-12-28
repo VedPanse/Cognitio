@@ -77,7 +77,11 @@ fun App() {
                 Spacer(modifier = Modifier.height(30.dp))
 
                 when (currentScreen) {
-                    Screen.HOME -> HomeScreen()
+                    Screen.HOME -> HomeScreen {
+                        selectedQuiz = it
+                        currentScreen = Screen.QUIZ_SCREEN
+                    }
+
                     Screen.SETTINGS -> SettingsScreen()
                     Screen.QUIZ_SCREEN -> QuizScreen(quiz = selectedQuiz!!)
                     Screen.QUIZ_FORM -> QuizFormScreen(showQuiz = { quiz ->
@@ -86,6 +90,7 @@ fun App() {
                     }) {
                         currentScreen = Screen.SETTINGS
                     }
+
                     Screen.SEARCH -> SearchScreen()
                 }
             }

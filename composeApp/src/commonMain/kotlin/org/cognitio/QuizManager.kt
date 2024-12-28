@@ -1,5 +1,7 @@
 package org.cognitio
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import okio.Path
 
@@ -61,6 +63,10 @@ fun quizToJSON(quiz: Quiz): String {
 
 
 fun recallQuiz(id: String): Quiz {
+    val gson: Gson = GsonBuilder()
+        .registerTypeAdapter(Question::class.java, QuestionDeserializer())
+        .create()
+
     val existingJson = readJsonFile()
 
     val quizJson = existingJson.getAsJsonObject(id)
@@ -79,6 +85,17 @@ fun recallQuiz(id: String): Quiz {
     ).toMutableList()
 
     return quiz
+}
+
+
+fun recallAllQuizzes(): List<Quiz> {
+    val quizList = mutableListOf<Quiz>()
+    val existingJson = readJsonFile()
+
+    for (id in existingJson.keySet()) {
+        quizList.add(recallQuiz(id))
+    }
+    return quizList.toList()
 }
 
 

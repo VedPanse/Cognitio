@@ -16,3 +16,8 @@ enum class Subject(val bgColor: Color, val textColor: Color) {
     ENGLISH(Color(0x1AF5A623), Color(0xFFF5A623)),
     OTHER(Color(0xFFE0E0E0), Color(0xFF757575));
 }
+
+
+fun mapSubjectNameToEnum(subjectName: String): Subject {
+    return enumValues<Subject>().find { it.name.equals(subjectName, ignoreCase = true) } ?: Subject.OTHER
+}

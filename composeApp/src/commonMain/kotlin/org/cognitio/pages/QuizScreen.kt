@@ -32,8 +32,8 @@ import org.cognitio.apiKey
 fun QuizScreen(quiz: Quiz) {
     var currentIndex by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
-    var percentage by remember { mutableStateOf(0.0) }
-    var graded by remember { mutableStateOf(false) }
+    var percentage by remember { mutableStateOf(quiz.questionList.sumOf { it.points } / quiz.questionList.size) }
+    var graded by remember { mutableStateOf(quiz.questionList[0].feedback != null) }
 
     Row(
         modifier = Modifier
