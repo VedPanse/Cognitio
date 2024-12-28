@@ -21,11 +21,13 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
+import org.cognitio.Dropdown
 import org.cognitio.GeminiServer
 import org.cognitio.GoButton
 import org.cognitio.Line
 import org.cognitio.PopupType
 import org.cognitio.Quiz
+import org.cognitio.Subject
 import org.cognitio.TimedPopup
 import org.cognitio.apiKey
 import org.cognitio.appName
@@ -80,9 +82,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             Spacer(modifier = Modifier.height(10.dp))
 
             InputFields(
-                subject,
-                topic,
-                onSubjectChange = { subject = it },
+                onSubjectChange = { subject = it.toString() },
                 onTopicChange = { topic = it })
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -238,9 +238,7 @@ fun pickFile(): String? {
 
 @Composable
 fun InputFields(
-    subject: String,
-    topic: String,
-    onSubjectChange: (String) -> Unit,
+    onSubjectChange: (Subject) -> Unit,
     onTopicChange: (String) -> Unit
 ) {
     if (isDesktop()) {
@@ -248,13 +246,13 @@ fun InputFields(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // TODO replace with <select>?
-            CustomTextField(
-                "Enter subject. Ex: History",
-                true,
-                getText = onSubjectChange,
-                modifier = Modifier.fillMaxWidth(0.4f)
-            )
+            Dropdown(Subject.entries.toList(), modifier = Modifier.fillMaxWidth(0.4f).height(34.dp), onSubjectChange)
+//            CustomTextField(
+//                "Enter subject. Ex: History",
+//                true,
+//                getText = onSubjectChange,
+//                modifier = Modifier.fillMaxWidth(0.4f)
+//            )
             CustomTextField(
                 "Enter topic. Ex: World War II",
                 true,
@@ -267,12 +265,13 @@ fun InputFields(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            CustomTextField(
-                "Enter subject. Ex: History",
-                true,
-                getText = onSubjectChange,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Dropdown(Subject.entries.toList(), onOptionSelected=onSubjectChange)
+//            CustomTextField(
+//                "Enter subject. Ex: History",
+//                true,
+//                getText = onSubjectChange,
+//                modifier = Modifier.fillMaxWidth()
+//            )
             CustomTextField(
                 "Enter topic. Ex: World War",
                 true,
