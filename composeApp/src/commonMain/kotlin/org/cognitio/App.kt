@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import okio.FileSystem
 import okio.Path
-import org.cognitio.pages.DashboardScreen
 import org.cognitio.pages.HomeScreen
 import org.cognitio.pages.QuizFormScreen
 import org.cognitio.pages.QuizScreen
@@ -75,8 +74,6 @@ fun App() {
             Spacer(modifier = Modifier.width(30.dp))
 
             Column {
-                val subjectList: List<Subject> = listOf(Subject.MATHEMATICS, Subject.HISTORY)
-                SubjectRep(subjectList)
                 Spacer(modifier = Modifier.height(30.dp))
 
                 when (currentScreen) {
@@ -89,8 +86,6 @@ fun App() {
                     }) {
                         currentScreen = Screen.SETTINGS
                     }
-
-                    Screen.DASHBOARD -> DashboardScreen()
                     Screen.SEARCH -> SearchScreen()
                 }
             }

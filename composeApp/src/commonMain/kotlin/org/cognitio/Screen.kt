@@ -1,5 +1,5 @@
 package org.cognitio
 
 enum class Screen {
-    HOME, SETTINGS, DASHBOARD, SEARCH, QUIZ_FORM, QUIZ_SCREEN
+    HOME, SETTINGS, SEARCH, QUIZ_FORM, QUIZ_SCREEN
 }

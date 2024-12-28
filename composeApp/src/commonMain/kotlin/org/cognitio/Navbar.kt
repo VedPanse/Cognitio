@@ -55,16 +55,6 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
 
         // Settings Icon
         NavbarItem(
-            isSelected = currentScreen == Screen.DASHBOARD,
-            icon = Icons.Filled.Dashboard,
-            outlinedIcon = Icons.Outlined.Dashboard,
-            onClick = { onScreenSelected(Screen.DASHBOARD) }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp)) // Space between icons
-
-        // Settings Icon
-        NavbarItem(
             isSelected = currentScreen == Screen.SETTINGS,
             icon = Icons.Filled.Settings,
             outlinedIcon = Icons.Outlined.Settings,
