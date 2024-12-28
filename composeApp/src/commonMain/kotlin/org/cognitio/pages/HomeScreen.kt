@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
@@ -28,10 +29,11 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 .fillMaxHeight()
         ) {
             item {
-                Text(text = "Start learning with", fontSize = 56.sp, color = Color.Gray)
+                Text(text = "Start learning with", fontSize = 56.sp)
                 Text(
                     text = appName,
                     fontSize = if (isDesktop()) 70.sp else 56.sp,
+                    color = AppTheme.primaryColor
                 )
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -45,43 +47,66 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
 
                 Line()
 
-                Spacer(modifier = Modifier.height(40.dp))
+                if (!isDesktop())
+                    Spacer(modifier = Modifier.height(35.dp))
 
-                // TODO render past quizzes
                 val displayedQuizzes = recallAllQuizzes().take(4) // Take only the first 4 quizzes
                 val thickness: Int = 2
 
-
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(0.5f)
-                            .drawBehind {
-                                // Draw the right border with specified thickness and color
-                                drawLine(
-                                    color = Color.Gray,
-                                    start = Offset(size.width - thickness.dp.toPx(), 0f),
-                                    end = Offset(size.width - thickness.dp.toPx(), size.height),
-                                    strokeWidth = thickness.toFloat() // Set the thickness of the border
-                                )
-                            }
-                    ) {
-                        displayedQuizzes.filterIndexed { index, _ -> index % 2 == 0 }.forEach {quiz ->
-                            quiz.compose {
-                                showQuiz(quiz)
-                            }
-                            Line()
+                if (isDesktop()) {
+                    if (displayedQuizzes.isEmpty())
+                        Column (modifier = Modifier.fillMaxSize()){
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Text(
+                                text = "Recent quizzes appear here. Start by clicking the + icon on the left",
+                                color = Color.Gray,
+                                fontSize = 24.sp,
+                                textAlign = TextAlign.Center
+                            )
                         }
+                    else
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(0.5f)
+                                    .drawBehind {
+                                        // Draw the right border with specified thickness and color
+                                        drawLine(
+                                            color = Color.Gray,
+                                            start = Offset(size.width - thickness.dp.toPx(), 0f),
+                                            end = Offset(
+                                                size.width - thickness.dp.toPx(),
+                                                size.height
+                                            ),
+                                            strokeWidth = thickness.toFloat() // Set the thickness of the border
+                                        )
+                                    }
+                            ) {
+                                displayedQuizzes.filterIndexed { index, _ -> index % 2 == 0 }
+                                    .forEach { quiz ->
+                                        quiz.compose {
+                                            showQuiz(quiz)
+                                        }
+                                        Line()
+                                    }
 
-                    }
-
-                    Column {
-                        displayedQuizzes.filterIndexed { index, _ -> index % 2 == 1 }.forEach {quiz ->
-                            Row(modifier = Modifier.fillMaxSize()) {
-                                Spacer(modifier = Modifier.width(5.dp))
-                                quiz.compose {showQuiz(quiz)}
                             }
-                            Line()
+
+                            Column {
+                                displayedQuizzes.filterIndexed { index, _ -> index % 2 == 1 }
+                                    .forEach { quiz ->
+                                        Row(modifier = Modifier.fillMaxSize()) {
+                                            Spacer(modifier = Modifier.width(5.dp))
+                                            quiz.compose { showQuiz(quiz) }
+                                        }
+                                        Line()
+                                    }
+                            }
                         }
+                } else {
+                    displayedQuizzes.forEach { quiz ->
+                        quiz.compose { showQuiz(quiz) }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Line()
                     }
                 }
             }
