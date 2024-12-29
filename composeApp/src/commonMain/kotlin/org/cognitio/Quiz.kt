@@ -4,6 +4,8 @@ package org.cognitio
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -36,8 +38,18 @@ class Quiz(
         return "Quiz(subject='$subject', topic='$topic', numQuestions=${numQuestions.contentToString()}, id=$id, documentPath=$documentPath, questionList=$questionList, dateModified='$dateModified', grade=$grade)"
     }
 
+    fun search(query: String): Boolean {
+        var rep: String = listOf(
+            subject,
+            topic,
+            documentPath,
+            questionList.joinToString(" ") { it.toString() }).joinToString(" ")
+
+        return rep.contains(query)
+    }
+
     @Composable
-    fun compose(showQuiz: (Quiz) -> Unit) {
+    fun compose(fill: Boolean = true, showQuiz: (Quiz) -> Unit) {
         MaterialTheme {
             Column {
                 Spacer(modifier = Modifier.height(20.dp))
@@ -68,9 +80,13 @@ class Quiz(
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    numQuestions.forEachIndexed {i, it ->
+                    numQuestions.forEachIndexed { i, it ->
                         Column {
-                            Text(it.toString(), fontSize = 18.sp, modifier = Modifier.padding(start = 7.dp))
+                            Text(
+                                it.toString(),
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 7.dp)
+                            )
 
                             val list = listOf("MCQ", "SAQ", "LAQ")
                             Text(list[i], color = Color.Gray)
@@ -83,11 +99,38 @@ class Quiz(
 
                 var displayText by remember { mutableStateOf("Review Quiz") }
 
-                GoButton(displayText) {
-                    displayText = "Opening Quiz..."
-                    showQuiz(this@Quiz)
-                }
-                Spacer(modifier = Modifier.height(20.dp))
+                if (fill)
+                    GoButton(displayText) {
+                        displayText = "Opening Quiz..."
+                        showQuiz(this@Quiz)
+                    }
+                else
+                    Button(
+                        onClick = {
+                            displayText = "Opening Quiz..."
+                            showQuiz(this@Quiz)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent,
+                            contentColor = AppTheme.themeColor,
+                            disabledBackgroundColor = Color.Transparent,
+                            disabledContentColor = Color.LightGray
+                        ),
+                        border = null,
+                        elevation = null,
+                    ) {
+                        Text(
+                            text = "Review Quiz",
+                            color = AppTheme.themeColor
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector = Icons.Default.ArrowForward,
+                            contentDescription = "Review Quiz",
+                            modifier = Modifier.size(20.dp) // Adjusted icon size
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

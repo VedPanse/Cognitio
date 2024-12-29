@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.material.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -25,7 +26,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
         modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(0.8f)
+            modifier = Modifier.fillMaxWidth(0.7f)
                 .fillMaxHeight()
         ) {
             item {
@@ -109,12 +110,27 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                         Line()
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
 
+        Spacer(modifier = Modifier.fillMaxWidth(0.3f))
+
         if (isDesktop()) {
             var searchedText by remember { mutableStateOf("") }
-            CustomTextField("Search", true, getText = { searchedText = it })
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item {
+                    CustomTextField("Search", true, getText = { searchedText = it })
+                }
+                items(recallAllQuizzes().filter { it.search(searchedText) && searchedText.isNotEmpty() }) { quiz ->
+                    quiz.compose(false) { showQuiz(quiz) }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Line()
+                }
+            }
 
             // TODO implement search
             Spacer(modifier = Modifier.width(20.dp))
