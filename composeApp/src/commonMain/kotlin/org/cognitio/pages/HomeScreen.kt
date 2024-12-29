@@ -51,7 +51,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 if (!isDesktop())
                     Spacer(modifier = Modifier.height(35.dp))
 
-                val displayedQuizzes = recallAllQuizzes().take(4) // Take only the first 4 quizzes
+                val displayedQuizzes = recallAllQuizzes().reversed().take(4) // Take only the first 4 quizzes
                 val thickness: Int = 2
 
                 if (isDesktop()) {
@@ -132,7 +132,6 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 }
             }
 
-            // TODO implement search
             Spacer(modifier = Modifier.width(20.dp))
         }
     }

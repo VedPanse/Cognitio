@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
 import org.cognitio.Screen
+import org.cognitio.isDesktop
 
 
 @Composable
@@ -44,15 +45,15 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp)) // Space between icons
 
         // Search Icon
-        NavbarItem(
-            isSelected = currentScreen == Screen.SEARCH,
-            icon = Icons.Filled.Search,
-            outlinedIcon = Icons.Outlined.Search,
-            onClick = { onScreenSelected(Screen.SEARCH) }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp)) // Space between icons
-
+        if (!isDesktop()) {
+            NavbarItem(
+                isSelected = currentScreen == Screen.SEARCH,
+                icon = Icons.Filled.Search,
+                outlinedIcon = Icons.Outlined.Search,
+                onClick = { onScreenSelected(Screen.SEARCH) }
+            )
+            Spacer(modifier = Modifier.height(16.dp)) // Space between icons
+        }
         // Settings Icon
         NavbarItem(
             isSelected = currentScreen == Screen.SETTINGS,

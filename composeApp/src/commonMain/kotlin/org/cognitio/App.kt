@@ -28,7 +28,7 @@ val filePath: Path = getJSONFilePath()
 val fileSystem = FileSystem.SYSTEM
 
 // TODO comments and documentation for kotlin convention
-
+// TODO improve the handwritten content
 @Composable
 @Preview
 fun App() {
@@ -91,7 +91,10 @@ fun App() {
                         currentScreen = Screen.SETTINGS
                     }
 
-                    Screen.SEARCH -> SearchScreen()
+                    Screen.SEARCH -> SearchScreen {
+                        selectedQuiz = it
+                        currentScreen = Screen.QUIZ_SCREEN
+                    }
                 }
             }
         }
