@@ -200,7 +200,6 @@ fun FilePickerBox(
             Spacer(modifier = Modifier.width(8.dp))
             // Display the text: if a file is selected, show the file name
 
-            // TODO send to gemini
             Text(
                 text = documentPath
                     ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",

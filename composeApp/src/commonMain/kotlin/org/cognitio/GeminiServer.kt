@@ -35,21 +35,27 @@ class GeminiServer(private val apiKey: String) {
             }
         """.trimIndent()
 
-        // Send the prompt to Gemini API
-        val response = withContext(Dispatchers.IO) {
-            try {
-                val content = generativeModel.generateContent(message) // Assuming this is of type Content or String
-                content.text ?: ""  // Extract the text if it's a Content object, or return an empty string
-            } catch (e: Exception) {
-                println("Error while sending prompt: ${e.localizedMessage}")
-                null
+        var response: String? = null
+
+        if (quiz.documentPath != null) {
+            response = docGeneration(quiz, message)
+        } else {
+            // Send the prompt to Gemini API
+            response = withContext(Dispatchers.IO) {
+                try {
+                    val content =
+                        generativeModel.generateContent(message) // Assuming this is of type Content or String
+                    content.text
+                        ?: ""  // Extract the text if it's a Content object, or return an empty string
+                } catch (e: Exception) {
+                    println("Error while sending prompt: ${e.localizedMessage}")
+                    null
+                }
             }
         }
-
         // If response is null, exit early
         if (response.isNullOrEmpty()) {
-            println("Error generating question list")
-            return
+            throw IllegalAccessError("Error generating question list")
         }
 
         // Clean and parse the response into a JSON object
@@ -116,13 +122,22 @@ class GeminiServer(private val apiKey: String) {
         }
     """.trimIndent()
 
-        var response = withContext(Dispatchers.IO) {
-            try {
-                val content = generativeModel.generateContent(message) // Assuming this is of type Content or String
-                content.text ?: ""  // Extract the text if it's a Content object, or return an empty string
-            } catch (e: Exception) {
-                println("Error while sending prompt: ${e.localizedMessage}")
-                null
+        var response: String? = null
+
+        if (quiz.documentPath != null) {
+            response = docGeneration(quiz, message)
+        } else {
+
+            response = withContext(Dispatchers.IO) {
+                try {
+                    val content =
+                        generativeModel.generateContent(message) // Assuming this is of type Content or String
+                    content.text
+                        ?: ""  // Extract the text if it's a Content object, or return an empty string
+                } catch (e: Exception) {
+                    println("Error while sending prompt: ${e.localizedMessage}")
+                    null
+                }
             }
         }
 
@@ -141,6 +156,42 @@ class GeminiServer(private val apiKey: String) {
 
             quiz.questionList[i].feedback = feedback.replace("  ", " ")
             quiz.questionList[i].points = grade
+        }
+    }
+
+    fun docGeneration(quiz: Quiz, prompt: String): String? {
+        if (quiz.documentPath == null) {
+            println("Document path is null. Cannot generate.")
+            return null
+        }
+
+        // Command to activate the virtual environment and run the Python script
+        val command = listOf(
+            "bash", "-c", // Use bash to execute a shell command
+            """
+        source myenv/bin/activate && python3 doc-genai.py $apiKey ${quiz.documentPath.replace(" ", "%20")} "$prompt"
+        """.trimIndent()
+        )
+
+        try {
+            // Create a process to execute the command
+            val process = ProcessBuilder(command)
+                .redirectErrorStream(true) // Merge error stream with output stream
+                .start()
+
+            // Capture the output of the Python script
+            var output = process.inputStream.bufferedReader().use { it.readText() }
+            output = output.split("WARNING: All log messages before absl::InitializeLog()")[0].trimIndent()
+
+            // Wait for the process to complete
+            val exitCode = process.waitFor()
+            if (exitCode == 0) {
+                return output
+            } else {
+                throw IllegalStateException("Python script execution failed with exit code $exitCode.")
+            }
+        } catch (e: Exception) {
+            throw IllegalStateException("Error running Python script: ${e.localizedMessage}")
         }
     }
 }
