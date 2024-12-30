@@ -1,2 +1,2 @@
 # Cognitio
- My submission to Kotlin Multiplatform Contest
+AI quiz generator
