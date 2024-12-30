@@ -30,7 +30,7 @@ val fileSystem = FileSystem.SYSTEM
 // TODO comments and documentation for kotlin convention
 // TODO improve the handwritten content
 // TODO search must ignore case
-
+// TODO change app icon
 
 @Composable
 @Preview
