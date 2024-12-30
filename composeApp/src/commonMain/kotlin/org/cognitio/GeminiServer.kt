@@ -16,11 +16,18 @@ import java.io.File
 import java.io.FileInputStream
 
 
-class GeminiServer(private val apiKey: String) {
+class GeminiServer(private var apiKey: String) {
     private val generativeModel = GenerativeModel(
         modelName = "gemini-1.5-flash",
         apiKey = apiKey
     )
+
+    init {
+        if (apiKey.isNullOrEmpty()) {
+            val file: File = File(getEnvPath())
+            apiKey = file.readText().split("=")[1]
+        }
+    }
 
     /**
      * Generate the list of questions for a quiz by sending a prompt to Gemini API.
