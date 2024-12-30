@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
@@ -20,19 +18,15 @@ import org.cognitio.TimedPopup
 import org.cognitio.getEnvPath
 import org.cognitio.writeFile
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.cognitio.Line
+import org.cognitio.apiKey
 import java.io.File
 import java.io.IOException
 
@@ -114,6 +108,7 @@ fun SettingsScreen() {
 
                         // Show success popup
                         showSuccessPopup = true
+                        apiKey = newAPIKey
                     }
                 } catch (e: IllegalArgumentException) {
                     // Show error popup for validation failure
