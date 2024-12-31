@@ -40,7 +40,7 @@ import java.io.FilenameFilter
 
 @Composable
 fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
-    var subject by remember { mutableStateOf("") }
+    var subject by remember { mutableStateOf("MATHEMATICS") }
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
