@@ -30,6 +30,8 @@ actual fun handleDocumentUpload(quiz: Quiz, message: String): String {
                     val pdfDocument = PDDocument.load(file)
                     if (pdfDocument.isEncrypted) throw IllegalAccessException("PDF is encrypted and cannot be processed")
                     val textStripper = PDFTextStripper()
+                    textStripper.sortByPosition = true
+                    textStripper.addMoreFormatting = true
                     writeText(textStripper.getText(pdfDocument))
                     pdfDocument.close()
                 }
