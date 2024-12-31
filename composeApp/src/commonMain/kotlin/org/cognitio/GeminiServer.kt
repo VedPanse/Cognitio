@@ -53,14 +53,20 @@ class GeminiServer(private var apiKey: String) {
         """.trimIndent()
 
         // Send the prompt to Gemini API
-        val response = withContext(Dispatchers.IO) {
-            try {
-                val content = generativeModel.generateContent(message) // Assuming this is of type Content or String
-                content.text ?: ""  // Extract the text if it's a Content object, or return an empty string
-            } catch (e: Exception) {
-                println("Error while sending prompt: ${e.localizedMessage}")
-                null
+        val response = if (quiz.documentPath == null) {
+            withContext(Dispatchers.IO) {
+                try {
+                    val content =
+                        generativeModel.generateContent(message) // Assuming this is of type Content or String
+                    content.text
+                        ?: ""  // Extract the text if it's a Content object, or return an empty string
+                } catch (e: Exception) {
+                    println("Error while sending prompt: ${e.localizedMessage}")
+                    null
+                }
             }
+        } else {
+            handleDocumentUpload(quiz, message)
         }
 
         // If response is null, exit early
@@ -161,3 +167,5 @@ class GeminiServer(private var apiKey: String) {
         }
     }
 }
+
+expect fun handleDocumentUpload(quiz: Quiz, message: String): String
