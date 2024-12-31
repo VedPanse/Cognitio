@@ -143,8 +143,6 @@ fun QuizScreen(quiz: Quiz) {
                 when (question.type) {
                     QType.MCQ -> {
                         question.options?.withIndex()?.forEach { (index, option) ->
-                            val prefix =
-                                ('A' + index).toString() // Calculate the letter (A, B, C, ...)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -159,7 +157,7 @@ fun QuizScreen(quiz: Quiz) {
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
-                                    text = "$prefix. $option", // Add the letter prefix
+                                    text = "$option", // Add the letter prefix
                                     fontSize = 16.sp,
                                     color = if (question.enteredAnswer == option) AppTheme.themeColor else AppTheme.textColor,
                                     fontWeight = if (question.enteredAnswer == option) FontWeight.SemiBold else FontWeight.Normal

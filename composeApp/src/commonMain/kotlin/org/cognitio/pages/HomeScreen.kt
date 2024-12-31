@@ -30,10 +30,10 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 .fillMaxHeight()
         ) {
             item {
-                Text(text = "Start learning with", fontSize = 56.sp)
+                Text(text = "Start learning with", fontSize = if (isDesktop()) 56.sp else 48.sp)
                 Text(
                     text = appName,
-                    fontSize = if (isDesktop()) 70.sp else 56.sp,
+                    fontSize = if (isDesktop()) 70.sp else 48.sp,
                     color = AppTheme.primaryColor
                 )
                 Spacer(modifier = Modifier.height(40.dp))

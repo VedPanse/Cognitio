@@ -151,10 +151,9 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                                 // Call the method to generate questions asynchronously
                                 GeminiServer(apiKey).generateQuestionList(quiz)
 
-                                for (question in quiz.questionList) {
-                                    println(question)
+                                if (quiz.questionList.isEmpty()) {
+                                    throw IllegalStateException("Ran into an error generating questions. Restart the app and try again")
                                 }
-
                                 showQuiz(quiz) // Show the generated quiz
                                 errorMessage = null // Clear any existing error
                             } catch (e: Exception) {
@@ -200,6 +199,7 @@ fun FilePickerBox(
             Spacer(modifier = Modifier.width(8.dp))
             // Display the text: if a file is selected, show the file name
 
+            // TODO send to gemini
             Text(
                 text = documentPath
                     ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",

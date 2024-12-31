@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
@@ -18,9 +20,14 @@ import org.cognitio.TimedPopup
 import org.cognitio.getEnvPath
 import org.cognitio.writeFile
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -67,7 +74,8 @@ fun SettingsScreen() {
             }
             pop()
             append(" ")
-            append("""
+            append(
+                """
                 Follow these steps:-
                 1. CLick on the link
                 2. Sign in with your google account if you are not already signed in
@@ -76,7 +84,8 @@ fun SettingsScreen() {
                 5. Make sure the API key you created is "GEMINI-1.5-FLASH"
                 6. Copy the API Key and enter it below
                 7. Hit enter
-            """.trimIndent())
+            """.trimIndent()
+            )
         }
         // Displaying the text with the clickable link
         Text(
@@ -89,39 +98,6 @@ fun SettingsScreen() {
         Spacer(modifier = Modifier.height(innerPadding.dp))
         Line()
         Spacer(modifier = Modifier.height(outerPadding.dp))
-
-        CustomTextField(
-            placeholder = "Enter your API key",
-            singleLine = true,
-            getText = { newAPIKey = it },
-            onEnterKeyPressed = {
-                try {
-                    // Validate API key (suspend function)
-                    validateApiKey(newAPIKey)
-
-                    // Save the key
-                    if (!showErrorPopup) {
-                        val file = File(getEnvPath())
-                        if (!file.exists()) file.createNewFile()
-
-                        writeFile(getEnvPath(), "GEMINI_API_KEY=$newAPIKey")
-
-                        // Show success popup
-                        showSuccessPopup = true
-                        apiKey = newAPIKey
-                    }
-                } catch (e: IllegalArgumentException) {
-                    // Show error popup for validation failure
-                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model"
-                    showErrorPopup = true
-                } catch (e: Exception) {
-                    // Show error popup for other failures
-                    errorMessage = "Encountered an error while updating API Key. Make sure the device is connected to the internet."
-                    showErrorPopup = true
-                }
-            }
-        )
-
         // Show success popup if the operation succeeds
         if (showSuccessPopup) {
             TimedPopup(
@@ -151,39 +127,40 @@ fun SettingsScreen() {
                 showErrorPopup = false
             }
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        CustomTextField(
+            placeholder = "Enter your API key",
+            singleLine = true,
+            getText = { newAPIKey = it },
+            onEnterKeyPressed = {
+                try {
+                    val file = File(getEnvPath())
+                    if (!file.exists()) file.createNewFile()
+
+                    writeFile(getEnvPath(), "GEMINI_API_KEY=$newAPIKey")
+
+                    // Show success popup
+                    showSuccessPopup = true
+                    apiKey = newAPIKey
+                } catch (e: IllegalArgumentException) {
+                    // Show error popup for validation failure
+                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model"
+                    showErrorPopup = true
+                } catch (e: Exception) {
+                    // Show error popup for other failures
+                    println(e.localizedMessage)
+                    errorMessage =
+                        "Encountered an error while updating API Key. Make sure the device is connected to the internet."
+                    showErrorPopup = true
+                }
+            }
+        )
+
+
     }
 }
 
 
 // Declare the expected platform-specific function
 expect fun openUrlInBrowser(url: String)
-
-fun validateApiKey(apiKey: String): Boolean {
-    val client = OkHttpClient()
-    val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey"
-
-    val requestBody = """
-        {
-            "contents": [{
-                "parts": [{"text": "say hi"}]
-            }]
-        }
-    """.trimIndent()
-
-    val request = Request.Builder()
-        .url(url)
-        .post(okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), requestBody))
-        .build()
-
-    try {
-        val response: Response = client.newCall(request).execute()
-        val responseBody = response.body?.string()
-        if (!response.isSuccessful || (responseBody?.contains("API Key invalid", ignoreCase = true) == true)) {
-            throw IllegalArgumentException("API key is invalid. Error: ${response.code} - ${response.message}")
-        }
-        return true
-    } catch (e: IOException) {
-        println("Failed to make request: ${e.message}")
-        throw IllegalArgumentException("Network error occurred while validating the API key")
-    }
-}

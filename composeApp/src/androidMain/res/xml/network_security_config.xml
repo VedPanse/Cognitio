@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">your.api.domain</domain>
+    </domain-config>
+    <debug-overrides>
+        <cleartextTrafficPermitted>true</cleartextTrafficPermitted>
+    </debug-overrides>
+</network-security-config>
+
