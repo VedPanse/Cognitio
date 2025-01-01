@@ -60,7 +60,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             Spacer(modifier = Modifier.height(35.dp))
 
             Text(
-                "$appName will use the API key you provided in Settings to generate questions and grade quizzes. " +
+                "Ready to test your knowledge? $appName leverages the API key you provided in Settings to generate questions and grade your quizzes. Keep in mind, the content is created by AI and may occasionally miss the mark—so always verify your insights!" +
                         "Therefore, content created in the quiz may not always be true.",
                 color = AppTheme.primaryColor
             )

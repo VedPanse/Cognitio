@@ -30,6 +30,9 @@ val fileSystem = FileSystem.SYSTEM
 // TODO comments and documentation for kotlin convention
 // TODO improve the handwritten content
 // TODO remove all println statements
+// TODO Prepare a 300-word essay explaining your background (educational and professional background,
+//  coding experience with different technologies, hobbies -- if relevant to the topic of the submission--,
+//  the idea behind your project and Code, and the technologies used to develop it) (the “Essay”)
 
 
 @Composable

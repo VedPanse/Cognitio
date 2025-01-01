@@ -41,7 +41,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 Line()
                 Spacer(modifier = Modifier.height(35.dp))
                 Text(
-                    text = "Solving a quiz everyday can go a long way. Using AI generated quizzes, this app can help you understand the concepts of anything you want to learn. This application leverages Google Gemini to test you on these concepts.",
+                    text = "Embark on a journey of daily learning! With AI-generated quizzes tailored to your interests, this app helps you master concepts and dive deeper into anything you want to explore. Powered by Google Gemini, each quiz challenges you to grow, learn, and thrive.",
                     color = AppTheme.primaryColor
                 )
                 Spacer(modifier = Modifier.height(35.dp))

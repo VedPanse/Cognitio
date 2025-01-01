@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -62,8 +64,11 @@ fun SettingsScreen() {
 
         val link = "https://aistudio.google.com/app/apikey"
         val annotatedString = buildAnnotatedString {
-            append("You can get a GEMINI-1.5-FLASH API key from ")
+            append("To use this app's features, you'll need a FREE Gemini-1.5-Flash API key. Here's how you can get one:")
             pushStringAnnotation(tag = "URL", annotation = link)
+
+            pop()
+            append(" ")
             withStyle(
                 style = SpanStyle(
                     color = AppTheme.primaryColor,
@@ -72,18 +77,16 @@ fun SettingsScreen() {
             ) {
                 append(link)
             }
-            pop()
-            append(" ")
+            append("\n")
             append(
                 """
                 Follow these steps:-
-                1. CLick on the link
-                2. Sign in with your google account if you are not already signed in
-                3. Click "Create an API Key"
-                4. In order to get a free API key, you will have to select a project from Google Cloud Projects. 
-                5. Make sure the API key you created is "GEMINI-1.5-FLASH"
-                6. Copy the API Key and enter it below
-                7. Hit enter
+                1. Click here to access the API key page.
+                2. Sign in with your Google account if you haven’t already.
+                3. Click "Create an API Key".
+                4. Select a project under Google Cloud Projects to generate your free API key.
+                5. Ensure the API key is specifically for the FREE version of Gemini-1.5-flash.
+                6. Copy the API key and paste it below.
             """.trimIndent()
             )
         }
@@ -130,6 +133,7 @@ fun SettingsScreen() {
             placeholder = "Enter your API key",
             singleLine = true,
             getText = { newAPIKey = it },
+            modifier = Modifier.fillMaxWidth(if (isDesktop()) 0.4f else 0.9f)
         )
 
         var buttonText by remember { mutableStateOf("Update") }
