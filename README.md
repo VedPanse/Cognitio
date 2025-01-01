@@ -1,7 +1,3 @@
-Sure, here’s an improved and enhanced version of your README for **Cognitio** based on the structure and inspiration you provided:
-
----
-
 # Cognitio
 
 ![Cognitio App](src/desktopMain/resources/cognitio.png)
@@ -133,7 +129,3 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 To see the app in action, watch the demo video below:
 
 **[Cognitio Demo Video](link_to_video)**
-
----
-
-Feel free to adjust, add, or modify content as needed. Let me know if you want to add more specific sections or need further assistance!
