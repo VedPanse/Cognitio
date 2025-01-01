@@ -20,20 +20,25 @@ actual fun handleDocumentUpload(quiz: Quiz, message: String): String {
 
     val mimeType = "text/plain"
     val tempFile = if (file.extension == "txt") {
-        // If the file is already a .txt, use it directly
+        // Use the file directly if it's already a plain text file
         file
     } else {
-        // Convert PDF or DOCX to text and save as temp.txt
+        // Convert PDF or DOCX to text and save as a temporary file
         File("temp.txt").apply {
             when (file.extension.lowercase()) {
                 "pdf" -> {
                     val pdfDocument = PDDocument.load(file)
                     if (pdfDocument.isEncrypted) throw IllegalAccessException("PDF is encrypted and cannot be processed")
-                    val textStripper = PDFTextStripper()
-                    textStripper.sortByPosition = true
-                    textStripper.addMoreFormatting = true
-                    writeText(textStripper.getText(pdfDocument))
+                    val textStripper = PDFTextStripper().apply {
+                        sortByPosition = true
+                        addMoreFormatting = true
+                    }
+                    val rawText = textStripper.getText(pdfDocument)
                     pdfDocument.close()
+
+                    // Preprocess text to handle formatting issues
+                    val cleanedText = preprocessPdfText(rawText)
+                    writeText(cleanedText)
                 }
                 "docx" -> {
                     val docx = XWPFDocument(FileInputStream(file))
@@ -48,7 +53,7 @@ actual fun handleDocumentUpload(quiz: Quiz, message: String): String {
 
     val numBytes = tempFile.length()
 
-    // Define constants
+    // Define constants for upload and API interactions
     val baseUrl = "https://generativelanguage.googleapis.com"
     val client = OkHttpClient()
     val gson = Gson()
@@ -127,10 +132,27 @@ actual fun handleDocumentUpload(quiz: Quiz, message: String): String {
     if (file.extension != "txt") tempFile.delete()
 
     // Extract and return the response text
-    val candidates = responseJson["candidates"].asJsonArray
-    return candidates.joinToString("") { candidate ->
+    return responseJson["candidates"].asJsonArray.joinToString("") { candidate ->
         candidate.asJsonObject["content"].asJsonObject["parts"].asJsonArray.joinToString("") { part ->
             part.asJsonObject["text"].asString
         }
     }
+}
+
+/**
+ * Preprocess PDF text to improve readability.
+ */
+private fun preprocessPdfText(rawText: String): String {
+    return rawText.lines()
+        .map { it.trim() } // Trim unnecessary whitespace
+        .filter { it.isNotBlank() } // Remove blank lines
+        .joinToString(" ") { line ->
+            if (line.endsWith("-")) {
+                // Remove hyphenation at line breaks
+                line.removeSuffix("-")
+            } else {
+                line
+            }
+        }
+        .replace("\\s+".toRegex(), " ") // Normalize spaces
 }
