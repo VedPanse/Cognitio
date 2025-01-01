@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
 import org.cognitio.CustomTextField
@@ -20,20 +18,21 @@ import org.cognitio.TimedPopup
 import org.cognitio.getEnvPath
 import org.cognitio.writeFile
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.Response
 import org.cognitio.Line
 import org.cognitio.apiKey
+import org.cognitio.isDesktop
 import java.io.File
 import java.io.IOException
 
@@ -57,8 +56,6 @@ fun SettingsScreen() {
         Spacer(modifier = Modifier.height(outerPadding.dp))
         Line()
         Spacer(modifier = Modifier.height(innerPadding.dp))
-        // Creating an AnnotatedString with a link annotation
-
 
         val link = "https://aistudio.google.com/app/apikey"
         val annotatedString = buildAnnotatedString {
@@ -95,33 +92,30 @@ fun SettingsScreen() {
                 openUrlInBrowser(link)
             }
         )
+
+
         Spacer(modifier = Modifier.height(innerPadding.dp))
         Line()
         Spacer(modifier = Modifier.height(outerPadding.dp))
-        // Show success popup if the operation succeeds
+
         if (showSuccessPopup) {
             TimedPopup(
                 message = "Successfully Updated API Key",
                 popupType = PopupType.SUCCESS,
-                time = 3000 // Show popup for 3 seconds
+                time = 3000
             )
-
-            // Automatically reset the success popup visibility after a delay
             LaunchedEffect(Unit) {
                 kotlinx.coroutines.delay(3000)
                 showSuccessPopup = false
             }
         }
 
-        // Show error popup if there is an error
         if (showErrorPopup) {
             TimedPopup(
                 message = errorMessage,
                 popupType = PopupType.ERROR,
-                time = 3000 // Show popup for 3 seconds
+                time = 3000
             )
-
-            // Automatically reset the error popup visibility after a delay
             LaunchedEffect(Unit) {
                 kotlinx.coroutines.delay(3000)
                 showErrorPopup = false
@@ -135,29 +129,66 @@ fun SettingsScreen() {
             getText = { newAPIKey = it },
             onEnterKeyPressed = {
                 try {
+                    if (isDesktop())
+                        validateApiKey(newAPIKey)
+                    println("Validation passed")
+
                     val file = File(getEnvPath())
                     if (!file.exists()) file.createNewFile()
-
                     writeFile(getEnvPath(), "GEMINI_API_KEY=$newAPIKey")
 
-                    // Show success popup
                     showSuccessPopup = true
                     apiKey = newAPIKey
                 } catch (e: IllegalArgumentException) {
-                    // Show error popup for validation failure
-                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model"
+                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model."
+                    showErrorPopup = true
+                } catch (e: IOException) {
+                    errorMessage = "Device is not connected to the internet."
                     showErrorPopup = true
                 } catch (e: Exception) {
-                    // Show error popup for other failures
-                    println(e.localizedMessage)
-                    errorMessage =
-                        "Encountered an error while updating API Key. Make sure the device is connected to the internet."
+                    errorMessage = "An unexpected error occurred: ${e.localizedMessage}"
                     showErrorPopup = true
                 }
             }
         )
+    }
+}
 
 
+fun validateApiKey(apiKey: String) {
+    val client = OkHttpClient()
+    val gson = Gson()
+
+    val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey"
+    val requestBody = """
+        {
+            "contents": [{
+                "parts": [{"text": "Explain how AI works"}]
+            }]
+        }
+    """.trimIndent()
+
+    val request = Request.Builder()
+        .url(url)
+        .post(RequestBody.create("application/json".toMediaTypeOrNull(), requestBody))
+        .build()
+
+    val response: Response
+    try {
+        response = client.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            val errorResponse = response.body?.string()
+            if (errorResponse != null) {
+                val errorJson = gson.fromJson(errorResponse, JsonObject::class.java)
+                val errorMessage = errorJson["error"]?.asJsonObject?.get("message")?.asString ?: "Invalid API Key"
+                throw IllegalArgumentException(errorMessage)
+            } else {
+                throw IllegalArgumentException("Invalid API Key")
+            }
+        }
+    } catch (e: IOException) {
+        throw IOException("No internet connection")
     }
 }
 

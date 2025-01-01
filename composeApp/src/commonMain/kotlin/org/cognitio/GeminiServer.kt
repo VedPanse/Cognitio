@@ -11,7 +11,7 @@ import java.util.Properties
 
 class GeminiServer(private var apiKey: String) {
     init {
-        if (apiKey.isNullOrEmpty()) {
+        if (apiKey.isEmpty()) {
             val envFile = File(getEnvPath())
             val properties = Properties().apply {
                 load(envFile.reader())
@@ -61,8 +61,7 @@ class GeminiServer(private var apiKey: String) {
                     content.text
                         ?: ""  // Extract the text if it's a Content object, or return an empty string
                 } catch (e: Exception) {
-                    println("Error while sending prompt: ${e.localizedMessage}")
-                    null
+                    throw IllegalAccessException("Error while sending prompt: ${e.localizedMessage}")
                 }
             }
         } else {
@@ -70,9 +69,8 @@ class GeminiServer(private var apiKey: String) {
         }
 
         // If response is null, exit early
-        if (response.isNullOrEmpty()) {
-            println("Error generating question list")
-            return
+        if (response.isEmpty()) {
+            throw IllegalArgumentException("Error generating question list")
         }
 
         // Clean and parse the response into a JSON object
@@ -144,12 +142,11 @@ class GeminiServer(private var apiKey: String) {
                 val content = generativeModel.generateContent(message) // Assuming this is of type Content or String
                 content.text ?: ""  // Extract the text if it's a Content object, or return an empty string
             } catch (e: Exception) {
-                println("Error while sending prompt: ${e.localizedMessage}")
-                null
+                throw IllegalAccessException("Error while sending prompt: ${e.localizedMessage}")
             }
         }
 
-        if (response.isNullOrEmpty())
+        if (response.isEmpty())
             throw IllegalAccessException("Error communicating with the API: Failed to grade questions - AI returned empty response")
 
         response = response.replace("```json", "").replace("```", "")

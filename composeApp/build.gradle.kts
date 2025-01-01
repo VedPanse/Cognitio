@@ -41,13 +41,15 @@ kotlin {
             implementation(libs.okio)
             implementation(libs.okhttp)
             implementation(libs.generativeai.google)
+            implementation(libs.ktor.client.core)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-
             implementation("org.apache.pdfbox:pdfbox:2.0.32")
             implementation("org.apache.poi:poi-ooxml:5.3.0")
+
+            runtimeOnly(libs.ktor.client.cio)
         }
     }
 }

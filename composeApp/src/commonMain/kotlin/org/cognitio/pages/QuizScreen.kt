@@ -82,9 +82,9 @@ fun QuizScreen(quiz: Quiz) {
                                 quiz.grade = percentage
                                 addQuiz(quiz)
                             } catch (e: IllegalArgumentException) {
-                                println("Quiz was empty")
+                                throw IllegalArgumentException("Error communicating to Gemini. Restart the app and try again")
                             } catch (e: IllegalAccessException) {
-                                println("Wrong API Key")
+                                throw IllegalAccessException("Wrong API Key. Make sure you use FREE gemini-1.5-flash model")
                             }
                         }
                     }
@@ -270,9 +270,9 @@ fun QuizScreen(quiz: Quiz) {
                                 quiz.grade = percentage
                                 addQuiz(quiz)
                             } catch (e: IllegalArgumentException) {
-                                println("Quiz was empty")
+                                throw IllegalAccessException("Error connecting to API: Quiz was empty")
                             } catch (e: IllegalAccessException) {
-                                println("Wrong API Key")
+                                throw IllegalAccessException("Wrong API Key")
                             }
                         }
                     }
