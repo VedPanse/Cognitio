@@ -6,20 +6,21 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import java.awt.Toolkit
+
 
 fun main() = application {
-    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    // Create window state for initial position and size
+    val windowState = rememberWindowState(
+        placement = WindowPlacement.Maximized,
+        position = WindowPosition(Alignment.Center)
+    )
+
+    // Set up the main window
     Window(
         onCloseRequest = ::exitApplication,
         title = "Cognitio",
-        state = rememberWindowState(
-            placement = WindowPlacement.Maximized,
-            position = WindowPosition(Alignment.Center)
-        )
+        state = windowState
     ) {
-        // Set the window size to the maximum screen size
-        window.setSize(screenSize.width, screenSize.height)
-        App()
+        App() // Load the app content
     }
 }

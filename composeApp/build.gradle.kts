@@ -1,6 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,17 +11,18 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
-        val desktopMain by getting
-        
+        val desktopMain by getting {
+            resources.srcDir("src/desktopMain/resources")
+        }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -46,9 +47,8 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation("org.apache.pdfbox:pdfbox:2.0.32")
-            implementation("org.apache.poi:poi-ooxml:5.3.0")
-
+            implementation(libs.pdfbox)
+            implementation(libs.poi.ooxml)
             runtimeOnly(libs.ktor.client.cio)
         }
     }
@@ -94,5 +94,11 @@ compose.desktop {
             packageName = "org.cognitio"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+tasks {
+    withType<Copy> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
