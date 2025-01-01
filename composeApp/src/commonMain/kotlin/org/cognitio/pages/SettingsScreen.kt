@@ -132,11 +132,13 @@ fun SettingsScreen() {
             getText = { newAPIKey = it },
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-        GoButton("Update", 5000) {
+        var buttonText by remember { mutableStateOf("Update") }
+
+        GoButton(buttonText) {
             CoroutineScope(Dispatchers.Main).launch {
+                buttonText = "Updating..."
                 try {
-                    validateApiKey(newAPIKey)
+                    validateApiKey(newAPIKey) // Validate API key
 
                     val file = File(getEnvPath())
                     if (!file.exists()) file.createNewFile()
@@ -153,6 +155,9 @@ fun SettingsScreen() {
                 } catch (e: Exception) {
                     errorMessage = "An unexpected error occurred: ${e.message ?: "Unknown error"}"
                     showErrorPopup = true
+                } finally {
+                    // Reset the button text back to "Update" in the `finally` block
+                    buttonText = "Update"
                 }
             }
         }
@@ -181,12 +186,9 @@ suspend fun validateApiKey(apiKey: String) {
 
     withContext(Dispatchers.IO) { // Run on a background thread
         try {
-            println("Checkpoint 1")
             client.newCall(request).execute().use { response ->
-                println("Checkpoint 2")
                 if (!response.isSuccessful) {
                     val errorResponse = response.body?.string()
-                    println("Checkpoint 3: Received error response = $errorResponse")
 
                     if (errorResponse != null) {
                         val errorJson = gson.fromJson(errorResponse, JsonObject::class.java)
