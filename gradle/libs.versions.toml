@@ -23,6 +23,8 @@ ktorClientCore = "3.0.3"
 materialIconsExtended = "1.7.6"
 okhttp = "4.12.0"
 okio = "3.9.1"
+pdfbox = "2.0.32"
+poiOoxml = "5.3.0"
 
 [libraries]
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -48,6 +50,8 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClien
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+pdfbox = { module = "org.apache.pdfbox:pdfbox", version.ref = "pdfbox" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
