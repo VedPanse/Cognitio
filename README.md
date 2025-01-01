@@ -82,9 +82,7 @@ Alternatively, you can use Gradle for building and running the project:
 ---
 
 ## Troubleshooting
-
-- If the app's **icon** doesn't show up, ensure that the resource path for the icon is correctly configured in `src/desktopMain/resources`.
-- If you encounter errors related to **API key** or quiz generation, make sure you've correctly entered the key in the **Settings** section.
+- If you encounter errors related to **API key** or quiz generation, make sure you've correctly entered the key in the **Settings** section, and that the API Key is for the **FREE** version of gemini-1.5-flash.
 
 ---
 
@@ -96,27 +94,6 @@ Alternatively, you can use Gradle for building and running the project:
 - **Gson** for JSON handling
 - **Apache PDFBox** for PDF text extraction
 - **Apache POI** for DOCX text extraction
-- **ImageIO** for handling image resources
-
----
-
-## Architecture
-
-The app follows the **Model-View-ViewModel (MVVM)** architecture, ensuring separation of concerns and scalability.
-
-- **Model**: Handles data and API requests (e.g., quiz data, document processing).
-- **View**: The UI layer, built with Jetpack Compose, displays quiz content and results.
-- **ViewModel**: Manages app logic, including generating quizzes and processing results.
-
----
-
-## Contributing
-
-If you want to contribute to this project, feel free to fork it and submit pull requests. Make sure to follow the guidelines below:
-
-1. Ensure all code is well-documented.
-2. Maintain the code style used in the repository.
-3. Add tests to cover any new features or bug fixes.
 
 ---
 
