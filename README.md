@@ -1,7 +1,7 @@
 # Cognitio
 
 <p align="center">
-    <img src="composeApp/src/desktopMain/resources/cognitio.png" width="25%" alt="Cognitio App">
+    <img src="composeApp/src/desktopMain/resources/logo-cognitio.png" width="25%" alt="Cognitio App">
 </p>
 
 **Cognitio** is a powerful Android and Desktop app designed to help users deepen their understanding of various concepts. Whether you're learning a new subject or exploring a new topic, Cognitio uses cutting-edge generative artificial intelligence (AI) from **Google Gemini** to create custom quizzes, test your knowledge, and grade your responses. This app allows users to input a subject and topic of choice and even upload a document (such as a reading) to be quizzed on.
