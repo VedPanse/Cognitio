@@ -155,13 +155,13 @@ fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
 
 
 @Composable
-fun GoButton(text: String, onClick: () -> Unit) {
+fun GoButton(text: String, delayTime: Long = 2000, onClick: () -> Unit) {
     var clicked by remember { mutableStateOf(false) }
 
     // Handle resetting the clicked state with a delay
     if (clicked && !text.contains("...")) {
         LaunchedEffect(Unit) {
-            kotlinx.coroutines.delay(2000)
+            kotlinx.coroutines.delay(delayTime)
             clicked = false
         }
     }

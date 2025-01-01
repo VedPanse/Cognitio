@@ -23,13 +23,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import org.cognitio.GoButton
 import org.cognitio.Line
 import org.cognitio.apiKey
 import org.cognitio.isDesktop
@@ -127,11 +130,13 @@ fun SettingsScreen() {
             placeholder = "Enter your API key",
             singleLine = true,
             getText = { newAPIKey = it },
-            onEnterKeyPressed = {
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+        GoButton("Update", 5000) {
+            CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    if (isDesktop())
-                        validateApiKey(newAPIKey)
-                    println("Validation passed")
+                    validateApiKey(newAPIKey)
 
                     val file = File(getEnvPath())
                     if (!file.exists()) file.createNewFile()
@@ -140,22 +145,23 @@ fun SettingsScreen() {
                     showSuccessPopup = true
                     apiKey = newAPIKey
                 } catch (e: IllegalArgumentException) {
-                    errorMessage = "Invalid API Key. Make sure you are using Gemini-1.5-Flash model."
+                    errorMessage = "Invalid API Key. Make sure you are using the FREE Gemini-1.5-Flash model."
                     showErrorPopup = true
                 } catch (e: IOException) {
                     errorMessage = "Device is not connected to the internet."
                     showErrorPopup = true
                 } catch (e: Exception) {
-                    errorMessage = "An unexpected error occurred: ${e.localizedMessage}"
+                    errorMessage = "An unexpected error occurred: ${e.message ?: "Unknown error"}"
                     showErrorPopup = true
                 }
             }
-        )
+        }
+
     }
 }
 
 
-fun validateApiKey(apiKey: String) {
+suspend fun validateApiKey(apiKey: String) {
     val client = OkHttpClient()
     val gson = Gson()
 
@@ -173,22 +179,35 @@ fun validateApiKey(apiKey: String) {
         .post(RequestBody.create("application/json".toMediaTypeOrNull(), requestBody))
         .build()
 
-    val response: Response
-    try {
-        response = client.newCall(request).execute()
+    withContext(Dispatchers.IO) { // Run on a background thread
+        try {
+            println("Checkpoint 1")
+            client.newCall(request).execute().use { response ->
+                println("Checkpoint 2")
+                if (!response.isSuccessful) {
+                    val errorResponse = response.body?.string()
+                    println("Checkpoint 3: Received error response = $errorResponse")
 
-        if (!response.isSuccessful) {
-            val errorResponse = response.body?.string()
-            if (errorResponse != null) {
-                val errorJson = gson.fromJson(errorResponse, JsonObject::class.java)
-                val errorMessage = errorJson["error"]?.asJsonObject?.get("message")?.asString ?: "Invalid API Key"
-                throw IllegalArgumentException(errorMessage)
-            } else {
-                throw IllegalArgumentException("Invalid API Key")
+                    if (errorResponse != null) {
+                        val errorJson = gson.fromJson(errorResponse, JsonObject::class.java)
+                        val errorMessage = errorJson["error"]?.asJsonObject?.get("message")?.asString
+                            ?: "Invalid API Key"
+                        throw IllegalArgumentException(errorMessage)
+                    } else {
+                        throw IllegalArgumentException("Invalid API Key")
+                    }
+                }
             }
+        } catch (e: IOException) {
+            println("IOException occurred: ${e.message}")
+            throw IOException("No internet connection or server unreachable")
+        } catch (e: IllegalArgumentException) {
+            println("IllegalArgumentException occurred: ${e.message}")
+            throw e
+        } catch (e: Exception) {
+            println("Unexpected Exception occurred: ${e.javaClass.name}, message: ${e.message}")
+            throw Exception("An unexpected error occurred: ${e.message ?: "Unknown error"}")
         }
-    } catch (e: IOException) {
-        throw IOException("No internet connection")
     }
 }
 
