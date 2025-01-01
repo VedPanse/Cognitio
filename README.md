@@ -6,7 +6,7 @@
 
 **Cognitio** is a powerful Android and Desktop app designed to help users deepen their understanding of various concepts. Whether you're learning a new subject or exploring a new topic, Cognitio uses cutting-edge generative artificial intelligence (AI) from **Google Gemini** to create custom quizzes, test your knowledge, and grade your responses. This app allows users to input a subject and topic of choice and even upload a document (such as a reading) to be quizzed on.
 
-Unlike traditional quiz apps that only assess multiple-choice questions, **Cognitio** empowers users by grading long-answer questions too, helping to improve writing skills and critical thinking. This makes it the perfect tool for both students and professionals who want to test their understanding and enhance their knowledge.
+Unlike traditional quiz apps that only assess multiple-choice questions, **Cognitio** empowers users by grading short-answer and long-answer questions too, helping to improve writing skills and critical thinking. This makes it the perfect tool for both students and professionals who want to test their understanding and enhance their knowledge.
 
 ---
 
@@ -14,7 +14,7 @@ Unlike traditional quiz apps that only assess multiple-choice questions, **Cogni
 
 - **Custom Quizzes**: Input any subject or topic and get AI-generated quiz questions tailored to that subject.
 - **Document-Based Quizzes**: Upload a document and the app will generate questions based on its content.
-- **AI-Powered Grading**: Unlike most quiz apps, Cognitio grades both multiple-choice and long-answer questions.
+- **AI-Powered Grading**: Unlike most quiz apps, Cognitio grades multiple-choice, short-answer, and long-answer questions.
 - **Cross-Platform Support**: Works seamlessly on Android and Desktop platforms (Windows & macOS).
 - **Easy-to-Use Interface**: Simple design and user-friendly navigation for a smooth experience.
 
@@ -24,8 +24,8 @@ Unlike traditional quiz apps that only assess multiple-choice questions, **Cogni
 
 - **Home Screen**: Provides a summary of your recent quizzes, allowing you to quickly start new quizzes or review previous ones.
 - **Quiz Creation Screen**: Enter the subject and topic, optionally upload a document, and generate a quiz. You can then take the quiz and see your performance.
-- **Quiz Interface**: Answer multiple-choice and long-answer questions, with real-time grading powered by Google Gemini.
-- **Settings Screen**: Input your API key, configure quiz settings, and customize the app according to your preferences.
+- **Quiz Interface**: Answer multiple-choice, short-answer, and long-answer questions, with real-time grading powered by Google Gemini.
+- **Settings Screen**: Configure your app by entering and validating your API key. The app ensures compatibility with the free GEMINI-1.5-FLASH version, enabling seamless quiz generation and grading.
 
 ---
 
