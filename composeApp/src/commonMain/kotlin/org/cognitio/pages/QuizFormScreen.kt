@@ -20,15 +20,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.cognitio.AppTheme
-import org.cognitio.CustomTextField
-import org.cognitio.Dropdown
+import org.cognitio.customTextField
+import org.cognitio.dropDown
 import org.cognitio.GeminiServer
-import org.cognitio.GoButton
-import org.cognitio.Line
+import org.cognitio.goButton
+import org.cognitio.line
 import org.cognitio.PopupType
 import org.cognitio.Quiz
 import org.cognitio.Subject
-import org.cognitio.TimedPopup
+import org.cognitio.timedPopup
 import org.cognitio.apiKey
 import org.cognitio.appName
 import org.cognitio.isDesktop
@@ -37,9 +37,14 @@ import java.awt.Frame
 import java.io.FilenameFilter
 
 
-
+/**
+ * Renders the form responsible for generating quizzes
+ *
+ * @author Ved Panse
+ * @bugs none
+ */
 @Composable
-fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
+fun quizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
     var subject by remember { mutableStateOf("MATHEMATICS") }
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
@@ -56,7 +61,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
         item {
             Text("Generate Quiz", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(40.dp))
-            Line()
+            line()
             Spacer(modifier = Modifier.height(35.dp))
 
             Text(
@@ -66,7 +71,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             )
 
             Spacer(modifier = Modifier.height(35.dp))
-            Line()
+            line()
             Spacer(modifier = Modifier.height(40.dp))
 
             // Render input fields for Subject and Topic
@@ -76,12 +81,12 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
                     kotlinx.coroutines.delay(2000)
                     errorMessage = null
                 }
-                TimedPopup(message, PopupType.ERROR)
+                timedPopup(message, PopupType.ERROR)
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            InputFields(
+            inputFields(
                 onSubjectChange = { subject = it.toString() },
                 onTopicChange = { topic = it })
 
@@ -98,7 +103,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             Spacer(modifier = Modifier.height(10.dp))
 
             // Render numeric input fields for number of questions
-            NumericInputFields(labels, numQuestions) { index, newValue ->
+            numericInputFields(labels, numQuestions) { index, newValue ->
                 numQuestions = numQuestions.toMutableList().apply { set(index, newValue) }
             }
 
@@ -106,7 +111,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
 
             // File Picker Dialog
             if (isDesktop()) {
-                FilePickerBox(
+                filePickerBox(
                     documentPath = documentPath,
                     onClick = {
                         if (isDesktop()) {
@@ -124,7 +129,7 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
             Spacer(modifier = Modifier.height(20.dp))
 
             var buttonText by remember { mutableStateOf("Generate Quiz") }
-            GoButton(buttonText) {
+            goButton(buttonText) {
                 when {
                     subject.isEmpty() || topic.isEmpty() -> {
                         errorMessage = "Subject and topic fields cannot be empty"
@@ -168,8 +173,11 @@ fun QuizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
 }
 
 
+/**
+ * Renders the file picker box to upload files to Gemini API
+ */
 @Composable
-fun FilePickerBox(
+fun filePickerBox(
     documentPath: String?,
     onClick: () -> Unit,
     textColor: Color
@@ -199,7 +207,6 @@ fun FilePickerBox(
             Spacer(modifier = Modifier.width(8.dp))
             // Display the text: if a file is selected, show the file name
 
-            // TODO send to gemini
             Text(
                 text = documentPath
                     ?: "(Optional) Select a file to be quizzed on (pdf, docx, or txt extensions only)",
@@ -236,7 +243,7 @@ fun pickFile(): String? {
 
 
 @Composable
-fun InputFields(
+fun inputFields(
     onSubjectChange: (Subject) -> Unit,
     onTopicChange: (String) -> Unit
 ) {
@@ -245,14 +252,14 @@ fun InputFields(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Dropdown(Subject.entries.toList(), modifier = Modifier.fillMaxWidth(0.4f).height(34.dp), onSubjectChange)
+            dropDown(Subject.entries.toList(), modifier = Modifier.fillMaxWidth(0.4f).height(34.dp), onSubjectChange)
 //            CustomTextField(
 //                "Enter subject. Ex: History",
 //                true,
 //                getText = onSubjectChange,
 //                modifier = Modifier.fillMaxWidth(0.4f)
 //            )
-            CustomTextField(
+            customTextField(
                 "Enter topic. Ex: World War II",
                 true,
                 getText = onTopicChange,
@@ -264,14 +271,8 @@ fun InputFields(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Dropdown(Subject.entries.toList(), onOptionSelected=onSubjectChange)
-//            CustomTextField(
-//                "Enter subject. Ex: History",
-//                true,
-//                getText = onSubjectChange,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-            CustomTextField(
+            dropDown(Subject.entries.toList(), onOptionSelected=onSubjectChange)
+            customTextField(
                 "Enter topic. Ex: World War",
                 true,
                 getText = onTopicChange,
@@ -283,7 +284,7 @@ fun InputFields(
 
 
 @Composable
-fun NumericInputFields(
+fun numericInputFields(
     labels: List<String>,
     numQuestions: List<Int>,
     onValueChange: (Int, Int) -> Unit

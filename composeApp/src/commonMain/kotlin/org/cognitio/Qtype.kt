@@ -1,6 +1,6 @@
 package org.cognitio
 
 
-enum class QType {
+enum class Qtype {
     MCQ, SHORT, LONG
 }

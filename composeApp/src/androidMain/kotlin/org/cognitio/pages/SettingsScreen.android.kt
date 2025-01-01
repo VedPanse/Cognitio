@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import org.cognitio.AppContextProvider
 
 actual fun openUrlInBrowser(url: String) {
-    val context: Context = AppContextProvider.context
+    val context: Context = AppContextProvider.getContext()
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // If it's called outside of an activity
     context.startActivity(intent)

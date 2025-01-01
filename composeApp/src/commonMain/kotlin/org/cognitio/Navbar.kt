@@ -17,7 +17,7 @@ import org.cognitio.isDesktop
 
 
 @Composable
-fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
+fun navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -25,7 +25,7 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
         Spacer(modifier = Modifier.height(30.dp)) // Space between icons
 
         // Home Icon
-        NavbarItem(
+        navbarItem(
             isSelected = currentScreen == Screen.HOME,
             icon = Icons.Filled.Home,
             outlinedIcon = Icons.Outlined.Home,
@@ -35,7 +35,7 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp)) // Space between icons
 
         // Add Icon
-        NavbarItem(
+        navbarItem(
             isSelected = currentScreen == Screen.QUIZ_FORM,
             icon = Icons.Filled.Add,
             outlinedIcon = Icons.Outlined.Add,
@@ -46,7 +46,7 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
 
         // Search Icon
         if (!isDesktop()) {
-            NavbarItem(
+            navbarItem(
                 isSelected = currentScreen == Screen.SEARCH,
                 icon = Icons.Filled.Search,
                 outlinedIcon = Icons.Outlined.Search,
@@ -55,7 +55,7 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
             Spacer(modifier = Modifier.height(16.dp)) // Space between icons
         }
         // Settings Icon
-        NavbarItem(
+        navbarItem(
             isSelected = currentScreen == Screen.SETTINGS,
             icon = Icons.Filled.Settings,
             outlinedIcon = Icons.Outlined.Settings,
@@ -67,7 +67,7 @@ fun Navbar(currentScreen: Screen, onScreenSelected: (Screen) -> Unit) {
 }
 
 @Composable
-fun NavbarItem(
+fun navbarItem(
     isSelected: Boolean,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     outlinedIcon: androidx.compose.ui.graphics.vector.ImageVector,

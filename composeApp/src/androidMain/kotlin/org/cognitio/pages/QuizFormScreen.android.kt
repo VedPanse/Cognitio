@@ -7,7 +7,8 @@ import android.net.NetworkCapabilities
 import org.cognitio.AppContextProvider
 
 actual fun isInternetAvailable(): Boolean {
-    val connectivityManager = AppContextProvider.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager = AppContextProvider.getContext()
+        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     val networkCapabilities = connectivityManager.activeNetwork?.let {
         connectivityManager.getNetworkCapabilities(it)

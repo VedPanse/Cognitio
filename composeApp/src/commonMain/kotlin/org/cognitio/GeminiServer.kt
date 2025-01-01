@@ -85,9 +85,9 @@ class GeminiServer(private var apiKey: String) {
             val answer: String? = questionDetails.get("answer")?.takeIf { !it.isJsonNull }?.asString
 
             val type = when (questionDetails.get("type").asString) {
-                "MCQ" -> QType.MCQ
-                "SHORT" -> QType.SHORT
-                "LONG" -> QType.LONG
+                "MCQ" -> Qtype.MCQ
+                "SHORT" -> Qtype.SHORT
+                "LONG" -> Qtype.LONG
                 else -> throw IllegalArgumentException("Invalid question type")
             }
 
@@ -113,9 +113,9 @@ class GeminiServer(private var apiKey: String) {
 
         quiz.questionList.forEach {
             questionBar += when(it.type) {
-                QType.MCQ -> "(MCQ, the options were: [${it.options}])"
-                QType.LONG -> "(Long answer question 200 words)"
-                QType.SHORT -> "(Short answer question 50 words)"
+                Qtype.MCQ -> "(MCQ, the options were: [${it.options}])"
+                Qtype.LONG -> "(Long answer question 200 words)"
+                Qtype.SHORT -> "(Short answer question 50 words)"
             } + it.question + ": " + it.enteredAnswer + ",\n"
         }
 

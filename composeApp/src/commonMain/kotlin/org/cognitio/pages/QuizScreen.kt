@@ -17,9 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.cognitio.AppTheme
-import org.cognitio.GoButton
-import org.cognitio.Line
-import org.cognitio.QType
+import org.cognitio.goButton
+import org.cognitio.line
+import org.cognitio.Qtype
 import org.cognitio.Quiz
 import org.cognitio.isDesktop
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ import org.cognitio.apiKey
 
 
 @Composable
-fun QuizScreen(quiz: Quiz) {
+fun quizScreen(quiz: Quiz) {
     var currentIndex by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope() // Create a coroutine scope for asynchronous work
     var percentage by remember { mutableStateOf(quiz.questionList.sumOf { it.points } / quiz.questionList.size) }
@@ -65,13 +65,13 @@ fun QuizScreen(quiz: Quiz) {
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                Line()
+                line()
                 Spacer(modifier = Modifier.height(40.dp))
 
                 var buttonText by remember { mutableStateOf("Submit quiz") }
 
                 if (!graded) {
-                    GoButton(buttonText) {
+                    goButton(buttonText) {
                         buttonText = "Submitting..."
                         scope.launch {
                             try {
@@ -123,7 +123,7 @@ fun QuizScreen(quiz: Quiz) {
 
                 if (graded && !isDesktop()) {
                     Text(
-                        String.format("%.2f", percentage) + "%",
+                        "Final grade: " + String.format("%.2f", percentage) + "%",
                         color = AppTheme.themeColor,
                         fontSize = 18.sp
                     )
@@ -141,7 +141,7 @@ fun QuizScreen(quiz: Quiz) {
 
                 // Render Answer Options or TextField
                 when (question.type) {
-                    QType.MCQ -> {
+                    Qtype.MCQ -> {
                         question.options?.withIndex()?.forEach { (index, option) ->
                             Box(
                                 modifier = Modifier
@@ -248,7 +248,7 @@ fun QuizScreen(quiz: Quiz) {
                 }
                 if (graded) {
                     Spacer(modifier = Modifier.height(40.dp))
-                    Line()
+                    line()
                     Spacer(modifier = Modifier.height(40.dp))
                     Text(text = quiz.questionList[currentIndex].points.toString(),
                         color = AppTheme.themeColor)
@@ -258,7 +258,7 @@ fun QuizScreen(quiz: Quiz) {
 
                 if (!isDesktop() && !graded) {
                     var buttonText by remember { mutableStateOf("Submit quiz") }
-                    GoButton(buttonText) {
+                    goButton(buttonText) {
                         buttonText = "Submitting..."
                         scope.launch {
                             try {

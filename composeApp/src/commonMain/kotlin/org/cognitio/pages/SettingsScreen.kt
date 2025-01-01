@@ -7,16 +7,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
-import org.cognitio.CustomTextField
+import org.cognitio.customTextField
 import org.cognitio.PopupType
-import org.cognitio.TimedPopup
+import org.cognitio.timedPopup
 import org.cognitio.getEnvPath
 import org.cognitio.writeFile
 import androidx.compose.ui.text.style.TextDecoration
@@ -33,9 +32,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.Response
-import org.cognitio.GoButton
-import org.cognitio.Line
+import org.cognitio.goButton
+import org.cognitio.line
 import org.cognitio.apiKey
 import org.cognitio.isDesktop
 import java.io.File
@@ -43,7 +41,7 @@ import java.io.IOException
 
 
 @Composable
-fun SettingsScreen() {
+fun settingsScreen() {
     var newAPIKey by remember { mutableStateOf("") }
     var showErrorPopup by remember { mutableStateOf(false) }
     var showSuccessPopup by remember { mutableStateOf(false) }
@@ -59,7 +57,7 @@ fun SettingsScreen() {
         Text("Settings", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(outerPadding.dp))
-        Line()
+        line()
         Spacer(modifier = Modifier.height(innerPadding.dp))
 
         val link = "https://aistudio.google.com/app/apikey"
@@ -101,11 +99,11 @@ fun SettingsScreen() {
 
 
         Spacer(modifier = Modifier.height(innerPadding.dp))
-        Line()
+        line()
         Spacer(modifier = Modifier.height(outerPadding.dp))
 
         if (showSuccessPopup) {
-            TimedPopup(
+            timedPopup(
                 message = "Successfully Updated API Key",
                 popupType = PopupType.SUCCESS,
                 time = 3000
@@ -117,7 +115,7 @@ fun SettingsScreen() {
         }
 
         if (showErrorPopup) {
-            TimedPopup(
+            timedPopup(
                 message = errorMessage,
                 popupType = PopupType.ERROR,
                 time = 3000
@@ -129,7 +127,7 @@ fun SettingsScreen() {
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        CustomTextField(
+        customTextField(
             placeholder = "Enter your API key",
             singleLine = true,
             getText = { newAPIKey = it },
@@ -138,7 +136,7 @@ fun SettingsScreen() {
 
         var buttonText by remember { mutableStateOf("Update") }
 
-        GoButton(buttonText) {
+        goButton(buttonText) {
             CoroutineScope(Dispatchers.Main).launch {
                 buttonText = "Updating..."
                 try {
@@ -205,13 +203,10 @@ suspend fun validateApiKey(apiKey: String) {
                 }
             }
         } catch (e: IOException) {
-            println("IOException occurred: ${e.message}")
             throw IOException("No internet connection or server unreachable")
         } catch (e: IllegalArgumentException) {
-            println("IllegalArgumentException occurred: ${e.message}")
             throw e
         } catch (e: Exception) {
-            println("Unexpected Exception occurred: ${e.javaClass.name}, message: ${e.message}")
             throw Exception("An unexpected error occurred: ${e.message ?: "Unknown error"}")
         }
     }

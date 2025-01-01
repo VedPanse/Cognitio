@@ -20,15 +20,13 @@ import androidx.compose.ui.unit.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.vector.ImageVector
 
 
 @Composable
-fun Line(color: Color = Color.Gray, thickness: Dp = 1.dp, size: Float = 1f) {
+fun line(color: Color = Color.Gray, thickness: Dp = 1.dp, size: Float = 1f) {
     Box(
         modifier = Modifier
             .fillMaxWidth(size)
@@ -39,7 +37,7 @@ fun Line(color: Color = Color.Gray, thickness: Dp = 1.dp, size: Float = 1f) {
 
 
 @Composable
-fun CustomTextField(
+fun customTextField(
     placeholder: String,
     singleLine: Boolean = true,
     modifier: Modifier = Modifier,
@@ -107,7 +105,7 @@ enum class PopupType {
 
 
 @Composable
-fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
+fun timedPopup(message: String, popupType: PopupType, time: Int = 5000) {
     var isVisible by remember { mutableStateOf(true) }
 
     if (isVisible) {
@@ -155,7 +153,7 @@ fun TimedPopup(message: String, popupType: PopupType, time: Int = 5000) {
 
 
 @Composable
-fun GoButton(text: String, delayTime: Long = 2000, onClick: () -> Unit) {
+fun goButton(text: String, delayTime: Long = 2000, onClick: () -> Unit) {
     var clicked by remember { mutableStateOf(false) }
 
     // Handle resetting the clicked state with a delay
@@ -194,7 +192,7 @@ fun GoButton(text: String, delayTime: Long = 2000, onClick: () -> Unit) {
 }
 
 @Composable
-fun Dropdown(
+fun dropDown(
     optionList: List<Subject>,
     modifier: Modifier = Modifier,
     onOptionSelected: (Subject) -> Unit

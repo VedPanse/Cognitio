@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import org.cognitio.AppTheme
-import org.cognitio.CustomTextField
-import org.cognitio.Line
+import org.cognitio.customTextField
+import org.cognitio.line
 import org.cognitio.Quiz
 import org.cognitio.appName
 import org.cognitio.isDesktop
@@ -21,7 +21,7 @@ import org.cognitio.recallAllQuizzes
 
 
 @Composable
-fun HomeScreen(showQuiz: (Quiz) -> Unit) {
+fun homeScreen(showQuiz: (Quiz) -> Unit) {
     Row(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -38,7 +38,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Line()
+                line()
                 Spacer(modifier = Modifier.height(35.dp))
                 Text(
                     text = "Embark on a journey of daily learning! With AI-generated quizzes tailored to your interests, this app helps you master concepts and dive deeper into anything you want to explore. Powered by Google Gemini, each quiz challenges you to grow, learn, and thrive.",
@@ -46,7 +46,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(35.dp))
 
-                Line()
+                line()
 
                 if (!isDesktop())
                     Spacer(modifier = Modifier.height(35.dp))
@@ -87,7 +87,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                                         quiz.compose {
                                             showQuiz(quiz)
                                         }
-                                        Line()
+                                        line()
                                     }
 
                             }
@@ -99,7 +99,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                                             Spacer(modifier = Modifier.width(5.dp))
                                             quiz.compose { showQuiz(quiz) }
                                         }
-                                        Line()
+                                        line()
                                     }
                             }
                         }
@@ -107,7 +107,7 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                     displayedQuizzes.forEach { quiz ->
                         quiz.compose { showQuiz(quiz) }
                         Spacer(modifier = Modifier.height(20.dp))
-                        Line()
+                        line()
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -123,12 +123,12 @@ fun HomeScreen(showQuiz: (Quiz) -> Unit) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 item {
-                    CustomTextField("Search", true, getText = { searchedText = it })
+                    customTextField("Search", true, getText = { searchedText = it })
                 }
                 items(recallAllQuizzes().filter { it.search(searchedText) && searchedText.isNotEmpty() }) { quiz ->
                     quiz.compose(false) { showQuiz(quiz) }
                     Spacer(modifier = Modifier.height(20.dp))
-                    Line()
+                    line()
                 }
             }
 

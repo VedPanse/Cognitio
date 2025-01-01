@@ -6,6 +6,6 @@ import okio.Path.Companion.toPath
 
 
 actual fun getJSONFilePath(): Path {
-    val context: Context = AppContextProvider.context // Get the context from a global provider
+    val context: Context = AppContextProvider.getContext() // Get the context from a global provider
     return context.filesDir.resolve(".${appName.lowercase()}.json").absolutePath.toPath()
 }

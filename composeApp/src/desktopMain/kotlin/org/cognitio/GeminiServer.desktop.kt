@@ -40,12 +40,14 @@ actual fun handleDocumentUpload(quiz: Quiz, message: String): String {
                     val cleanedText = preprocessPdfText(rawText)
                     writeText(cleanedText)
                 }
+
                 "docx" -> {
                     val docx = XWPFDocument(FileInputStream(file))
                     val text = docx.paragraphs.joinToString("\n") { it.text }
                     writeText(text)
                     docx.close()
                 }
+
                 else -> throw IllegalArgumentException("Unsupported file type: ${file.extension}")
             }
         }

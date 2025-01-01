@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 class Question(
     val question: String,
     val answer: String?,
-    val type: QType,
+    val type: Qtype,
     val options: List<String>? = null
 ) {
     var feedback: String? = null

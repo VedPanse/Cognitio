@@ -10,31 +10,44 @@ import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import okio.FileSystem
 import okio.Path
-import org.cognitio.pages.HomeScreen
-import org.cognitio.pages.QuizFormScreen
-import org.cognitio.pages.QuizScreen
-import org.cognitio.pages.SearchScreen
-import org.cognitio.pages.SettingsScreen
-import org.eidetic.Navbar
+import org.cognitio.pages.homeScreen
+import org.cognitio.pages.quizFormScreen
+import org.cognitio.pages.quizScreen
+import org.cognitio.pages.searchScreen
+import org.cognitio.pages.settingsScreen
+import org.eidetic.navbar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import java.io.File
 import java.util.Properties
 
+/**
+ * Defines an entry point to the main composable
+ *
+ * @author Ved Panse
+ * @bugs none
+ */
+
 var apiKey: String = ""
+
+/**
+ * Gets the path to .env file for different platforms
+ */
 expect fun getEnvPath(): String
+
 
 val gson = Gson()
 val filePath: Path = getJSONFilePath()
 val fileSystem = FileSystem.SYSTEM
 
 // TODO comments and documentation for kotlin convention
-// TODO improve the handwritten content
-// TODO remove all println statements
 // TODO Prepare a 300-word essay explaining your background (educational and professional background,
 //  coding experience with different technologies, hobbies -- if relevant to the topic of the submission--,
 //  the idea behind your project and Code, and the technologies used to develop it) (the “Essay”)
 
 
+/**
+ * Entry point for main composable
+ */
 @Composable
 @Preview
 fun App() {
@@ -76,28 +89,28 @@ fun App() {
                 .fillMaxSize()
                 .background(AppTheme.bgColor)
         ) {
-            Navbar(currentScreen = currentScreen, onScreenSelected = { currentScreen = it })
+            navbar(currentScreen = currentScreen, onScreenSelected = { currentScreen = it })
             Spacer(modifier = Modifier.width(30.dp))
 
             Column {
                 Spacer(modifier = Modifier.height(30.dp))
 
                 when (currentScreen) {
-                    Screen.HOME -> HomeScreen {
+                    Screen.HOME -> homeScreen {
                         selectedQuiz = it
                         currentScreen = Screen.QUIZ_SCREEN
                     }
 
-                    Screen.SETTINGS -> SettingsScreen()
-                    Screen.QUIZ_SCREEN -> QuizScreen(quiz = selectedQuiz!!)
-                    Screen.QUIZ_FORM -> QuizFormScreen(showQuiz = { quiz ->
+                    Screen.SETTINGS -> settingsScreen()
+                    Screen.QUIZ_SCREEN -> quizScreen(quiz = selectedQuiz!!)
+                    Screen.QUIZ_FORM -> quizFormScreen(showQuiz = { quiz ->
                         selectedQuiz = quiz
                         currentScreen = Screen.QUIZ_SCREEN
                     }) {
                         currentScreen = Screen.SETTINGS
                     }
 
-                    Screen.SEARCH -> SearchScreen {
+                    Screen.SEARCH -> searchScreen {
                         selectedQuiz = it
                         currentScreen = Screen.QUIZ_SCREEN
                     }
@@ -107,6 +120,12 @@ fun App() {
     }
 }
 
+
+/**
+ * Checks if the current runtime platform is desktop or android
+ *
+ * @return if current runtime platform is desktop
+ */
 fun isDesktop(): Boolean {
     return try {
         Class.forName("java.awt.Desktop") != null
@@ -116,8 +135,11 @@ fun isDesktop(): Boolean {
 }
 
 
+/**
+ * Displays the subjects in a row
+ */
 @Composable
-fun SubjectRep(subjectList: List<Subject>) {
+fun subjectRep(subjectList: List<Subject>) {
     Row {
         subjectList.forEach {
             Box(

@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,7 +53,7 @@ class Quiz(
         MaterialTheme {
             Column {
                 Spacer(modifier = Modifier.height(20.dp))
-                SubjectRep(listOf(mapSubjectNameToEnum(subject)))
+                subjectRep(listOf(mapSubjectNameToEnum(subject)))
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
@@ -101,7 +100,7 @@ class Quiz(
                 var displayText by remember { mutableStateOf("Review Quiz") }
 
                 if (fill)
-                    GoButton(displayText) {
+                    goButton(displayText) {
                         displayText = "Opening Quiz..."
                         showQuiz(this@Quiz)
                     }
@@ -131,7 +130,7 @@ class Quiz(
                             modifier = Modifier.size(20.dp) // Adjusted icon size
                         )
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

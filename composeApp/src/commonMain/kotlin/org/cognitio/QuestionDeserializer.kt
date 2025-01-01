@@ -15,7 +15,7 @@ class QuestionDeserializer : JsonDeserializer<Question> {
 
         val question = jsonObject.get("question").asString
         val answer = jsonObject.get("answer")?.asString
-        val type = QType.valueOf(jsonObject.get("type").asString)
+        val type = Qtype.valueOf(jsonObject.get("type").asString)
         val options = jsonObject.get("options")?.let {
             context.deserialize<List<String>>(it, List::class.java)
         }

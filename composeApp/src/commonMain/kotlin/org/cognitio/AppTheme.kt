@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.*
 
 expect val JetBrainsMono: FontFamily
 
-val appName: String = "Cognitio"
+const val appName: String = "Cognitio"
 
 object AppTheme {
     val bgColor = Color(0xFF333333)

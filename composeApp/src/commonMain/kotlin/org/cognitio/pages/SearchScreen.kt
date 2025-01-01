@@ -9,14 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.cognitio.CustomTextField
-import org.cognitio.Line
+import org.cognitio.customTextField
+import org.cognitio.line
 import org.cognitio.Quiz
 import org.cognitio.recallAllQuizzes
 
 
 @Composable
-fun SearchScreen(showQuiz: (Quiz) -> Unit) {
+fun searchScreen(showQuiz: (Quiz) -> Unit) {
     var searchedText by remember { mutableStateOf("") }
 
     MaterialTheme {
@@ -24,12 +24,12 @@ fun SearchScreen(showQuiz: (Quiz) -> Unit) {
             modifier = Modifier.fillMaxSize()
         ) {
             item {
-                CustomTextField("Search", true, getText = { searchedText = it })
+                customTextField("Search", true, getText = { searchedText = it })
             }
             items(recallAllQuizzes().filter { it.search(searchedText) && searchedText.isNotEmpty() }) { quiz ->
                 quiz.compose(false) { showQuiz(quiz) }
                 Spacer(modifier = Modifier.height(20.dp))
-                Line()
+                line()
             }
         }
     }
