@@ -47,7 +47,7 @@ Unlike traditional quiz apps that only assess multiple-choice questions, **Cogni
 
 #### Set up the API Key:
 1. You need an API key from **Google Gemini** to generate quizzes and grade them.
-2. You can obtain the key from [this link](https://aistudio.google.com/app/apikey).
+2. You can obtain the key from [this link](https://aistudio.google.com/app/apikey). You can also view the [Demo Video](#demo).
 3. After obtaining the API key, open the **Settings** section in the app and paste the key into the appropriate field.
 
 ---
@@ -77,12 +77,16 @@ Alternatively, you can use Gradle for building and running the project:
 2. Open the project in IntelliJ IDEA or Android Studio.
 3. To run the app, select the **desktopMain** configuration.
 4. Ensure all necessary resources (like the app icon and API key) are in place.
-5. Hit **Run** to launch the app on your desktop.
+5. Type the following command in the terminal opened in the project directory.
+
+```bash
+./gradlew run
+```
 
 ---
 
 ## Troubleshooting
-- If you encounter errors related to **API key** or quiz generation, make sure you've correctly entered the key in the **Settings** section, and that the API Key is for the **FREE** version of gemini-1.5-flash.
+- If you encounter errors related to **API key** or quiz generation, make sure you've correctly entered the key in the **Settings** section, and that the API Key is for the **FREE** version of gemini-1.5-flash. You can watch the [Demo Video](#demo) to get instructions on acquiring an API Key.
 
 ---
 
