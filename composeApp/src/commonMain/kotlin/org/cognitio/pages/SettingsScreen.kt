@@ -35,6 +35,7 @@ import okhttp3.RequestBody
 import org.cognitio.goButton
 import org.cognitio.line
 import org.cognitio.apiKey
+import org.cognitio.appName
 import org.cognitio.isDesktop
 import java.io.File
 import java.io.IOException
@@ -62,7 +63,7 @@ fun settingsScreen() {
 
         val link = "https://aistudio.google.com/app/apikey"
         val annotatedString = buildAnnotatedString {
-            append("To use this app's features, you'll need a FREE Gemini-1.5-Flash API key. Here's how you can get one:")
+            append("To use $appName's features, you'll need a FREE Gemini-1.5-Flash API key. Here's how you can get one:")
             pushStringAnnotation(tag = "URL", annotation = link)
 
             pop()

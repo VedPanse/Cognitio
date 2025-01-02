@@ -35,6 +35,10 @@ fun quizScreen(quiz: Quiz) {
     var percentage by remember { mutableStateOf(quiz.questionList.sumOf { it.points } / quiz.questionList.size) }
     var graded by remember { mutableStateOf(quiz.questionList[0].feedback != null) }
 
+    if (graded) {
+        feedback(quiz)
+        return
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,22 +96,6 @@ fun quizScreen(quiz: Quiz) {
 
 
                 Spacer(modifier = Modifier.height(30.dp))
-
-                if (graded) {
-                    Text(
-                        "Final Quiz Grade",
-                        color = AppTheme.themeColor,
-                        fontSize = 24.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(5.dp))
-
-                    Text(String.format("%.2f", percentage) + "%",
-                        fontSize = 30.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
             }
         }
 
@@ -120,15 +108,6 @@ fun quizScreen(quiz: Quiz) {
         ) {
             item {
                 val question = quiz.questionList[currentIndex]
-
-                if (graded && !isDesktop()) {
-                    Text(
-                        "Final grade: " + String.format("%.2f", percentage) + "%",
-                        color = AppTheme.themeColor,
-                        fontSize = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
 
                 // Question Text
                 Text(
@@ -157,7 +136,7 @@ fun quizScreen(quiz: Quiz) {
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
-                                    text = "$option", // Add the letter prefix
+                                    text = option, // Add the letter prefix
                                     fontSize = 16.sp,
                                     color = if (question.enteredAnswer == option) AppTheme.themeColor else AppTheme.textColor,
                                     fontWeight = if (question.enteredAnswer == option) FontWeight.SemiBold else FontWeight.Normal
@@ -169,7 +148,7 @@ fun quizScreen(quiz: Quiz) {
 
                     else -> {
                         TextField(
-                            value = question.enteredAnswer as? String ?: "",
+                            value = question.enteredAnswer ?: "",
                             onValueChange = {
                                 question.enteredAnswer =
                                     it // Update the unique answer for the question
@@ -245,15 +224,6 @@ fun quizScreen(quiz: Quiz) {
                             modifier = Modifier.size(20.dp) // Adjusted icon size
                         )
                     }
-                }
-                if (graded) {
-                    Spacer(modifier = Modifier.height(40.dp))
-                    line()
-                    Spacer(modifier = Modifier.height(40.dp))
-                    Text(text = quiz.questionList[currentIndex].points.toString(),
-                        color = AppTheme.themeColor)
-                    Spacer(modifier = Modifier.height(5.dp))
-                    quiz.questionList[currentIndex].feedback?.let { Text(it) }
                 }
 
                 if (!isDesktop() && !graded) {

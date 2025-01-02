@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import okio.FileSystem
 import okio.Path
+import org.cognitio.pages.feedback
 import org.cognitio.pages.homeScreen
 import org.cognitio.pages.quizFormScreen
 import org.cognitio.pages.quizScreen
@@ -98,7 +99,7 @@ fun App() {
                 when (currentScreen) {
                     Screen.HOME -> homeScreen {
                         selectedQuiz = it
-                        currentScreen = Screen.QUIZ_SCREEN
+                        currentScreen = Screen.FEEDBACK
                     }
 
                     Screen.SETTINGS -> settingsScreen()
@@ -114,6 +115,8 @@ fun App() {
                         selectedQuiz = it
                         currentScreen = Screen.QUIZ_SCREEN
                     }
+
+                    Screen.FEEDBACK -> feedback(selectedQuiz!!)
                 }
             }
         }

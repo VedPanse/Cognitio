@@ -41,7 +41,7 @@ fun homeScreen(showQuiz: (Quiz) -> Unit) {
                 line()
                 Spacer(modifier = Modifier.height(35.dp))
                 Text(
-                    text = "Embark on a journey of daily learning! With AI-generated quizzes tailored to your interests, this app helps you master concepts and dive deeper into anything you want to explore. Powered by Google Gemini, each quiz challenges you to grow, learn, and thrive.",
+                    text = "Embark on a journey of daily learning! With AI-generated quizzes tailored to your interests, $appName helps you master concepts and dive deeper into anything you want to explore. Powered by Google Gemini, each quiz challenges you to grow, learn, and thrive.",
                     color = AppTheme.primaryColor
                 )
                 Spacer(modifier = Modifier.height(35.dp))
@@ -56,7 +56,7 @@ fun homeScreen(showQuiz: (Quiz) -> Unit) {
 
                 if (isDesktop()) {
                     if (displayedQuizzes.isEmpty())
-                        Column (modifier = Modifier.fillMaxSize()){
+                        Column(modifier = Modifier.fillMaxSize()) {
                             Spacer(modifier = Modifier.height(20.dp))
                             Text(
                                 text = "Recent quizzes appear here. Start by clicking the + icon on the left",

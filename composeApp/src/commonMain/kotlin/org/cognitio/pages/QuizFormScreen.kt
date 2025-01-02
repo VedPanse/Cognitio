@@ -45,7 +45,7 @@ import java.io.FilenameFilter
  */
 @Composable
 fun quizFormScreen(showQuiz: (Quiz) -> Unit, settingsRedirect: () -> Unit) {
-    var subject by remember { mutableStateOf("MATHEMATICS") }
+    var subject by remember { mutableStateOf("PHYSICS") }
     var topic by remember { mutableStateOf("") }
     var numQuestions by remember { mutableStateOf(List(3) { 1 }) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -260,7 +260,7 @@ fun inputFields(
 //                modifier = Modifier.fillMaxWidth(0.4f)
 //            )
             customTextField(
-                "Enter topic. Ex: World War II",
+                "Enter topic. Ex: Quantum Mechanics",
                 true,
                 getText = onTopicChange,
                 modifier = Modifier.fillMaxWidth(0.7f)

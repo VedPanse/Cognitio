@@ -47,7 +47,7 @@ class GeminiServer(private var apiKey: String) {
                 question: <question_text>,
                 answer: <answer_text only if it is a MCQ question, else null>,
                 type: <question_type (can be any one of MCQ, SHORT, or LONG)>,
-                options: <list of options only if it is a MCQ question, else null>
+                options: <list of options only if it is a MCQ question starting with option number as A., B., C., and so on, else null>
                 }
             }
         """.trimIndent()
