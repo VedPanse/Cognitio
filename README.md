@@ -111,4 +111,4 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 To see the app in action, watch the demo video below:
 
-**[See Cognition in Action](https://drive.google.com/file/d/1heokNtPD9ymaIYuRFxYcxsZJfIOryztQ/view?usp=sharing)**
+**[See Cognition in Action](https://drive.google.com/file/d/1I7Sqs2e8WcfSer-lEBJEWHNROG7hEXA4/view?usp=sharing)**
