@@ -110,4 +110,4 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 ## Demo
 
 To see the app in action, watch the demo video below:
-https://github.com/VedPanse/Cognitio/composeApp/src/desktopMain/resources/Cognitio.mp4
+**[See Cognition in Action]**(composeApp/src/desktopMain/resources/Cognitio.mp4)
