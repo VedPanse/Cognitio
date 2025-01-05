@@ -111,4 +111,7 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 
 To see the app in action, watch the demo video below:
 
-**[Cognitio Demo Video](link_to_video)**
+<video width="640" height="360" controls>
+  <source src="composeApp/src/desktopMain/resources/Cognitio.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
