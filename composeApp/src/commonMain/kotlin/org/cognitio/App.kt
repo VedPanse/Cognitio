@@ -40,11 +40,6 @@ val gson = Gson()
 val filePath: Path = getJSONFilePath()
 val fileSystem = FileSystem.SYSTEM
 
-// TODO comments and documentation for kotlin convention
-// TODO Prepare a 300-word essay explaining your background (educational and professional background,
-//  coding experience with different technologies, hobbies -- if relevant to the topic of the submission--,
-//  the idea behind your project and Code, and the technologies used to develop it) (the “Essay”)
-
 
 /**
  * Entry point for main composable
